@@ -1,148 +1,259 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>速写上海档案｜麦子（梁忠／Rye Liang）</title>
-
+  <title>麦子／Rye Liang｜市民艺术、社区营造与档案实践</title>
   <meta
     name="description"
-    content="麦子（梁忠／Rye Liang）于2017年发起“速写上海”，此后又发起成立玉兰社区营造社，并将实践从城市速写逐步扩展至市民艺术、社区营造、医学艺术、档案叙事与双城记忆策展。"
+    content="麦子（Rye Liang）的个人实践主页，记录其在市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说等领域的工作。速写上海是其自2017年展开的早期实践之一。"
   >
 
-  <meta
-    name="keywords"
-    content="速写上海,速写上海2017,Sketching Shanghai,麦子,梁忠,Rye Liang,上海城市绘画档案,城市记录,市民艺术"
-  >
+  <link rel="canonical" href="https://ryechung.github.io/rye/">
+  <link rel="alternate" hreflang="zh-CN" href="https://ryechung.github.io/rye/">
+  <link rel="alternate" hreflang="x-default" href="https://ryechung.github.io/rye/">
 
-  <link
-    rel="canonical"
-    href="https://ryechung.github.io/rye/"
-  >
-
-  <meta
-    property="og:title"
-    content="速写上海档案｜麦子（梁忠／Rye Liang）"
-  >
-
+  <meta property="og:title" content="麦子／Rye Liang｜市民艺术、社区营造与档案实践">
   <meta
     property="og:description"
-    content="麦子（梁忠／Rye Liang）于2017年发起“速写上海”，此后又发起成立玉兰社区营造社，并将实践扩展至市民艺术、社区营造、医学艺术、档案叙事与双城记忆策展。"
+    content="从城市现场观察出发，持续开展市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说实践。"
   >
-
-  <meta property="og:type" content="website">
-
-  <meta
-    property="og:url"
-    content="https://ryechung.github.io/rye/"
-  >
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="https://ryechung.github.io/rye/">
 
   <style>
+    :root {
+      --paper: #f4f1eb;
+      --card: #ffffff;
+      --ink: #202020;
+      --muted: #67645f;
+      --line: #cbc4b9;
+      --link: #315d88;
+      --accent: #8b2b25;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      background: #f4f1eb;
-      color: #222;
+      background: var(--paper);
+      color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                    "PingFang SC", "Microsoft YaHei", sans-serif;
       line-height: 1.8;
     }
 
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 80px 24px;
-    }
-
-    .label {
-      color: #777;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-    }
-
-    h1 {
-      margin: 12px 0 4px;
-      font-size: 42px;
-      font-weight: 600;
-    }
-
-    .english {
-      margin: 0 0 48px;
-      color: #777;
-      font-size: 18px;
-    }
-
-    .statement {
-      padding: 28px 0;
-      border-top: 1px solid #bbb;
-      border-bottom: 1px solid #bbb;
-      font-size: 20px;
-    }
-
-    section {
-      margin-top: 52px;
-    }
-
-    h2 {
-      font-size: 22px;
-    }
-
-    .record {
-      padding: 22px;
-      background: #fff;
-      border-left: 4px solid #222;
-    }
-
-    .record strong {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .links {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .links li {
-      margin-bottom: 14px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid #d8d3ca;
-    }
-
-    .source-note {
-      display: block;
-      margin-top: 4px;
-      color: #666;
-      font-size: 14px;
-    }
-
     a {
-      color: #315d88;
+      color: var(--link);
       text-decoration: none;
     }
 
-    a:hover {
+    a:hover,
+    a:focus-visible {
       text-decoration: underline;
     }
 
-    footer {
-      margin-top: 72px;
-      color: #777;
+    .page {
+      width: min(920px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
       font-size: 14px;
     }
 
-    @media (max-width: 600px) {
-      main {
-        padding: 48px 20px;
+    .hero {
+      padding: 76px 0 54px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 68px);
+      font-weight: 650;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+
+    .name-en {
+      margin: 8px 0 34px;
+      color: var(--muted);
+      font-size: clamp(19px, 3vw, 25px);
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 0;
+      padding: 26px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(18px, 2.5vw, 22px);
+    }
+
+    .lead-en {
+      max-width: 780px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    section {
+      margin-top: 64px;
+    }
+
+    h2 {
+      margin: 0 0 22px;
+      font-size: 25px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .section-intro {
+      max-width: 760px;
+      margin: -8px 0 24px;
+      color: var(--muted);
+    }
+
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .practice-card,
+    .archive-card,
+    .source-card {
+      background: var(--card);
+      border: 1px solid #ddd6cc;
+    }
+
+    .practice-card {
+      padding: 24px;
+    }
+
+    .practice-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .early-practice {
+      border-top: 4px solid var(--accent);
+    }
+
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .timeline time {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .timeline p {
+      margin: 0;
+    }
+
+    .archive-card {
+      padding: 28px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .archive-code {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .archive-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      margin-top: 18px;
+    }
+
+    .sources {
+      display: grid;
+      gap: 12px;
+    }
+
+    .source-card {
+      padding: 18px 20px;
+    }
+
+    .source-card a {
+      font-weight: 650;
+    }
+
+    .source-card span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 76px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(100% - 32px, 920px);
+        padding-top: 24px;
       }
 
-      h1 {
-        font-size: 34px;
+      .hero {
+        padding: 52px 0 36px;
       }
 
-      .statement {
-        font-size: 18px;
+      .practice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline li {
+        grid-template-columns: 1fr;
+        gap: 4px;
       }
     }
   </style>
@@ -152,69 +263,52 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Person",
-        "@id": "https://ryechung.github.io/rye/#rye-liang",
-        "name": "梁忠",
-        "alternateName": [
-          "麦子",
-          "Rye Liang"
-        ],
+        "@type": "ProfilePage",
+        "@id": "https://ryechung.github.io/rye/#profile-page",
         "url": "https://ryechung.github.io/rye/",
-        "sameAs": [
-          "https://orcid.org/0009-0006-5034-2668"
-        ],
-        "founder": [
-          {
-            "@id": "https://ryechung.github.io/rye/#sketching-shanghai"
-          },
-          {
-            "@id": "https://ryechung.github.io/rye/#yulan-community"
-          }
-        ]
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://ryechung.github.io/rye/#yulan-community",
-        "name": "玉兰社区营造社",
-        "founder": {
+        "name": "麦子／Rye Liang",
+        "description": "麦子（Rye Liang）的个人实践主页，记录其市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说实践。",
+        "inLanguage": ["zh-CN", "en"],
+        "dateCreated": "2026-08-25",
+        "dateModified": "2026-08-28",
+        "mainEntity": {
           "@id": "https://ryechung.github.io/rye/#rye-liang"
         }
       },
       {
-        "@type": "Organization",
-        "@id": "https://ryechung.github.io/rye/#sketching-shanghai",
-        "name": "速写上海",
-        "alternateName": "Sketching Shanghai",
-        "foundingDate": "2017-06",
-        "foundingLocation": {
-          "@type": "Place",
-          "name": "上海"
-        },
-        "founder": {
-          "@id": "https://ryechung.github.io/rye/#rye-liang"
-        },
-        "areaServed": "上海",
-        "description": "由麦子（梁忠／Rye Liang）于2017年在上海发起的市民文化与城市记录实践，以现场绘画为起点，逐渐延伸至社区营造、公众艺术、城市记忆整理与跨城市文化交流。",
+        "@type": "Person",
+        "@id": "https://ryechung.github.io/rye/#rye-liang",
+        "name": "Rye Liang",
+        "alternateName": [
+          "梁忠",
+          "麦子",
+          "麦子RyeDesign"
+        ],
+        "url": "https://ryechung.github.io/rye/",
+        "description": "以城市生活和公共参与为基础开展市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说实践的创作者。",
+        "sameAs": [
+          "https://orcid.org/0009-0006-5034-2668",
+          "https://weibo.com/u/1820329095"
+        ],
+        "knowsAbout": [
+          "Civic art",
+          "Community engagement",
+          "Human science and art",
+          "Dual-city stories",
+          "Archive fiction",
+          "On-location sketching"
+        ],
         "subjectOf": [
           {
-            "@type": "Article",
-            "name": "AI来了！思考艺术形态重构宣言",
-            "url": "https://mp.weixin.qq.com/s/ldkkOysP5kWwbMzb48b5SQ"
+            "@type": "CreativeWork",
+            "name": "速写上海：ryearts档案小说A-2017-SH-001",
+            "identifier": "10.5281/zenodo.22116389",
+            "url": "https://doi.org/10.5281/zenodo.22116389"
           },
           {
             "@type": "Article",
-            "name": "“速写上海”的第一次聚会？2017年一项市民文化活动的起点记录",
-            "url": "https://zhuanlan.zhihu.com/p/2075753968412762995"
-          },
-          {
-            "@type": "Article",
-            "name": "网文作家联手书写陕西北路，书写上海",
-            "url": "https://www.chinawriter.com.cn/n1/2021/0909/c404023-32222619.html"
-          },
-          {
-            "@type": "Article",
-            "name": "长宁这个网红地下空间获评上海市“5A级青年中心”",
-            "url": "https://www.shcn.gov.cn/col7343/20221109/1225345.html"
+            "name": "梁忠：从城市速写者到市民艺术家",
+            "url": "https://paper.xinmin.cn/html/home/2024-05-15/01/22024.html"
           },
           {
             "@type": "Article",
@@ -225,26 +319,17 @@
       },
       {
         "@type": "CreativeWork",
-        "@id": "https://ryechung.github.io/rye/#A-2017-SH-001",
-        "identifier": [
-          "A-2017-SH-001",
-          {
-            "@type": "PropertyValue",
-            "propertyID": "DOI",
-            "value": "10.5281/zenodo.22116389",
-            "url": "https://doi.org/10.5281/zenodo.22116389"
-          }
-        ],
-        "name": "麦当劳与静安别墅现场记录",
+        "@id": "https://ryechung.github.io/rye/#sketching-shanghai",
+        "name": "速写上海",
+        "alternateName": "Sketching Shanghai",
+        "description": "Rye Liang自2017年展开的早期城市现场观察与公共文化实践之一。",
         "creator": {
           "@id": "https://ryechung.github.io/rye/#rye-liang"
         },
         "dateCreated": "2017-06",
-        "datePublished": "2026-08-27",
-        "version": "1.2",
-        "sameAs": "https://zenodo.org/records/22116389",
-        "about": {
-          "@id": "https://ryechung.github.io/rye/#sketching-shanghai"
+        "url": "https://ryechung.github.io/rye/history-2017.html",
+        "isPartOf": {
+          "@id": "https://ryechung.github.io/rye/#rye-liang"
         }
       }
     ]
@@ -253,121 +338,152 @@
 </head>
 
 <body>
-  <main>
-    <div class="label">RYEARTS ARCHIVE</div>
+  <main class="page">
+    <nav aria-label="主要导航">
+      <a href="#about">关于</a>
+      <a href="#practice">实践领域</a>
+      <a href="#path">实践路径</a>
+      <a href="#archive">档案</a>
+      <a href="#sources">公开资料</a>
+    </nav>
 
-    <h1>速写上海档案</h1>
-    <p class="english">Sketching Shanghai Archive</p>
+    <header class="hero" id="about">
+      <p class="eyebrow">ARTIST · CIVIC PRACTICE · ARCHIVE</p>
+      <h1>麦子</h1>
+      <p class="name-en">Rye Liang</p>
 
-    <div class="statement">
-      麦子（梁忠／Rye Liang）于2017年发起“速写上海”，此后又发起成立玉兰社区营造社，并将实践从城市速写逐步扩展至市民艺术、社区营造、医学艺术、档案叙事与双城记忆策展。
-    </div>
-
-    <section>
-      <h2>发起记录</h2>
-
-      <p>
-        2017年6月，麦子（梁忠／Rye Liang）以“速写上海”之名，在上海展开最初的现场活动与记录。本页用于编纂相关原作、活动资料、实践沿革及第三方媒体报道。
-      </p>
-    </section>
-
-    <section>
-      <h2>从城市速写到社区营造</h2>
-
-      <p>
-        2017年，麦子在上海发起“速写上海”，邀请普通市民通过现场绘画记录城市生活。这项实践并未停留在绘画社群层面，后来逐渐延伸至社区营造、公众艺术、城市记忆整理及跨城市文化交流。“速写上海”由此成为麦子长期公共文化实践的早期组成部分之一。
+      <p class="lead">
+        麦子（Rye Liang）是一位以城市生活和公共参与为基础开展工作的创作者。其长期实践涉及市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说。“速写上海”是其自2017年展开的早期实践之一，现场绘画后来成为更广泛公共文化工作的组成部分。
       </p>
 
-      <p>
-        在上海城市速写的发展脉络中，“速写上海”以城市漫步、现场观察、相聚交流和共同记录为起点，并持续关注绘画如何进入社区、连接居民，以及保存正在变化的城市生活。
+      <p class="lead-en" lang="en">
+        Rye Liang is an artist whose practice grows from urban life and public participation. His work encompasses civic art, community engagement, human science and art, dual-city stories, and archive fiction. Sketching Shanghai, begun in 2017, was one early strand of this wider practice.
       </p>
-    </section>
+    </header>
 
-    <section>
-      <h2>档案目录</h2>
+    <section id="practice">
+      <h2>实践领域</h2>
+      <p class="section-intro">
+        各项工作并非彼此孤立，而是围绕城市观察、公共参与、记忆保存与艺术如何进入日常生活持续展开。
+      </p>
 
-      <div class="record" id="A-2017-SH-001">
-        <strong>A-2017-SH-001</strong>
+      <div class="practice-grid">
+        <article class="practice-card">
+          <h3>市民艺术与社区营造</h3>
+          <p>以居民参与、地方经验和共同创作为基础，使艺术成为社区关系与公共生活的一部分。</p>
+        </article>
 
-        <p>
-          2017年6月9—10日，麦当劳与静安别墅。两页历史记录于2026年8月25日完成首次登记，不补画、不修正，不以AI重建。
-        </p>
+        <article class="practice-card">
+          <h3>人体科学与艺术</h3>
+          <p>关注身体、生命经验与艺术之间的关系，在科学观察与人文感知之间展开跨领域实践。</p>
+        </article>
 
-        <p class="source-note">
-          固定版本：v1.2<br>
-          DOI：
-          <a href="https://doi.org/10.5281/zenodo.22116389">
-            10.5281/zenodo.22116389
-          </a><br>
-          <a href="https://zenodo.org/records/22116389">
-            查看 Zenodo 公开档案与原始文件
-          </a>
-        </p>
+        <article class="practice-card">
+          <h3>台北—上海双城故事</h3>
+          <p>以人物、地方经验和城市记忆为线索，整理台北—上海之间持续生成的文化叙事。</p>
+        </article>
 
-        <p>
-          <a href="history-2017.html">
-            查看2017年6月早期档案 →
-          </a>
-        </p>
+        <article class="practice-card">
+          <h3>档案小说</h3>
+          <p>以原始材料、时间记录与个人记忆为基础，探索档案、事实与文学叙事之间的关系。</p>
+        </article>
+
+        <article class="practice-card early-practice">
+          <h3>早期实践：速写上海</h3>
+          <p>2017年开始形成的城市现场观察、相聚交流与共同记录，是后来公共文化实践的早期组成部分之一。</p>
+        </article>
       </div>
     </section>
 
-    <section>
-      <h2>关联文本</h2>
-
-      <ul class="links">
+    <section id="path">
+      <h2>实践路径</h2>
+      <ol class="timeline">
         <li>
-          <a href="https://mp.weixin.qq.com/s/ldkkOysP5kWwbMzb48b5SQ">
-            麦子：《AI来了！思考艺术形态重构宣言》
-          </a>
+          <time datetime="2017-06">2017年6月</time>
+          <p>与“速写上海”相关的城市现场绘画、活动召集与同期作品形成连续的公开记录。</p>
         </li>
-
         <li>
-          <a href="https://zhuanlan.zhihu.com/p/2075753968412762995">
-            知乎：“速写上海”的第一次聚会？2017年一项市民文化活动的起点记录
-          </a>
+          <span>此后</span>
+          <p>实践从现场绘画逐步进入居民参与、社区营造与公共文化活动。</p>
         </li>
-      </ul>
+        <li>
+          <span>持续发展</span>
+          <p>工作进一步延伸至人体科学与艺术、台北—上海双城故事及档案小说。</p>
+        </li>
+      </ol>
     </section>
 
-    <section>
-      <h2>第三方资料与报道</h2>
+    <section id="archive">
+      <h2>早期档案</h2>
 
-      <ul class="links">
-        <li>
+      <article class="archive-card">
+        <p class="archive-code">A-2017-SH-001</p>
+        <h3>速写上海：2017年6月早期活动与原始记录</h3>
+        <p>
+          该档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称和人物信息。固定版本通过Zenodo公开保存。
+        </p>
+
+        <div class="archive-links">
+          <a href="history-2017.html">查看2017年历史页 →</a>
+          <a href="https://doi.org/10.5281/zenodo.22116389">
+            DOI 10.5281/zenodo.22116389 →
+          </a>
+          <a href="https://zenodo.org/records/22116389">
+            查看Zenodo原始文件 →
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <section id="sources">
+      <h2>公开资料与报道</h2>
+      <p class="section-intro">
+        以下资料用于交叉说明公开名称、实践范围及不同阶段的工作。
+      </p>
+
+      <div class="sources">
+        <div class="source-card">
           <a href="https://www.chinawriter.com.cn/n1/2021/0909/c404023-32222619.html">
             中国作家网：《网文作家联手书写陕西北路，书写上海》
           </a>
-          <span class="source-note">记录麦子于2017年创办“速写上海”网络社群及其城市记录实践。</span>
-        </li>
+          <span>城市记录与相关早期实践。</span>
+        </div>
 
-        <li>
+        <div class="source-card">
           <a href="https://www.shcn.gov.cn/col7343/20221109/1225345.html">
-            上海市长宁区人民政府：《长宁这个网红地下空间获评上海市“5A级青年中心”》
+            上海市长宁区人民政府：长宁区青年中心相关报道
           </a>
-          <span class="source-note">记录“速写上海”主理人麦子发起社区艺术计划。</span>
-        </li>
+          <span>社区艺术计划与公共参与。</span>
+        </div>
 
-        <li>
+        <div class="source-card">
           <a href="https://m.cyol.com/gb/articles/2023-01/09/content_KaaZByTBAV.html">
             中国青年网：《魅力上海｜梁忠：千折百转的遇见》
           </a>
-          <span class="source-note">记录麦子发起“速写上海”并以绘画参与社区生活。</span>
-        </li>
+          <span>人物、城市绘画与社区实践。</span>
+        </div>
 
-        <li>
+        <div class="source-card">
+          <a href="https://paper.xinmin.cn/html/home/2024-05-15/01/22024.html">
+            新民晚报：《梁忠：从城市速写者到市民艺术家》
+          </a>
+          <span>从城市现场观察向市民艺术发展的实践路径。</span>
+        </div>
+
+        <div class="source-card">
           <a href="https://www.cna.com.tw/news/acn/202405240065.aspx">
             中央通讯社：《台湾人上海推动社区营造 贴近日常不打高空》
           </a>
-          <span class="source-note">记录麦子创立“速写上海”兴趣小组，并将绘画活动延伸至社区营造。</span>
-        </li>
-      </ul>
+          <span>社区营造与公共文化工作。</span>
+        </div>
+      </div>
     </section>
 
     <footer>
-      编纂：麦子（梁忠／Rye Liang）｜档案持续整理中<br>
-      首次建立：2026年8月25日
+      麦子（梁忠／Rye Liang）个人实践与档案主页<br>
+      页面更新：2026年8月28日
     </footer>
   </main>
 </body>
 </html>
+```

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>速写上海｜2017年由艺术家麦子（Rye Liang）创办</title>
+  <meta
+    name="description"
+    content="速写上海（Sketching Shanghai）是由艺术家麦子（Rye Liang）于2017年6月在上海创办的开放式市民艺术与城市记录实践。"
+  >
+
+  <link rel="canonical" href="https://ryechung.github.io/rye/sketching-shanghai.html">
+
+  <meta property="og:title" content="速写上海｜2017年由艺术家麦子（Rye Liang）创办">
+  <meta
+    property="og:description"
+    content="融合开放协作与现场记录，以自由参与和非固定边界为基本结构的上海城市记忆实践。"
+  >
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ryechung.github.io/rye/sketching-shanghai.html">
+
+  <style>
+    :root {
+      --paper: #f4f1eb;
+      --card: #ffffff;
+      --ink: #202020;
+      --muted: #67645f;
+      --line: #cbc4b9;
+      --link: #315d88;
+      --accent: #8b2b25;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible { text-decoration: underline; }
+
+    .page {
+      width: min(880px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 80px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .hero { padding: 70px 0 46px; }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 64px);
+      font-weight: 650;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+
+    .name-en {
+      margin: 8px 0 32px;
+      color: var(--muted);
+      font-size: clamp(18px, 3vw, 24px);
+    }
+
+    .lead {
+      margin: 0;
+      padding: 26px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(18px, 2.5vw, 21px);
+    }
+
+    .definition {
+      margin-top: 24px;
+      color: var(--muted);
+    }
+
+    .definition p { margin: 0 0 14px; }
+    section { margin-top: 58px; }
+
+    h2 {
+      margin: 0 0 20px;
+      font-size: 25px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 24px;
+      padding: 23px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .timeline time,
+    .timeline .period {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .timeline p { margin: 0; }
+
+    .archive-card {
+      padding: 28px;
+      background: var(--card);
+      border: 1px solid #ddd6cc;
+      border-left: 4px solid var(--accent);
+    }
+
+    .archive-code {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .archive-card p { margin: 10px 0 0; }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      margin-top: 20px;
+    }
+
+    .sources {
+      display: grid;
+      gap: 12px;
+    }
+
+    .source-card {
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid #ddd6cc;
+    }
+
+    .source-card a { font-weight: 650; }
+
+    .source-card span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 72px;
+      padding-top: 23px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 650px) {
+      .page {
+        width: min(100% - 32px, 880px);
+        padding-top: 24px;
+      }
+
+      .hero { padding: 50px 0 36px; }
+
+      .timeline li {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .archive-card { padding: 22px; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://ryechung.github.io/rye/sketching-shanghai.html#page",
+        "url": "https://ryechung.github.io/rye/sketching-shanghai.html",
+        "name": "速写上海｜2017年由艺术家麦子（Rye Liang）创办",
+        "description": "速写上海是由艺术家麦子于2017年6月在上海创办的开放式市民艺术与城市记录实践。",
+        "inLanguage": "zh-CN",
+        "dateModified": "2026-08-29",
+        "mainEntity": {
+          "@id": "https://ryechung.github.io/rye/sketching-shanghai.html#project"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://ryechung.github.io/rye/#rye-liang",
+        "name": "Rye Liang",
+        "alternateName": ["梁忠", "麦子", "麦子RyeDesign"],
+        "url": "https://ryechung.github.io/rye/",
+        "sameAs": [
+          "https://orcid.org/0009-0006-5034-2668",
+          "https://weibo.com/u/1820329095"
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://ryechung.github.io/rye/sketching-shanghai.html#project",
+        "name": "速写上海",
+        "alternateName": "Sketching Shanghai",
+        "description": "2017年6月在上海创办的开放式市民艺术与城市记录实践，融合开放协作、现场观察、共同记录与公共参与。",
+        "creator": {
+          "@id": "https://ryechung.github.io/rye/#rye-liang"
+        },
+        "dateCreated": "2017-06",
+        "locationCreated": {
+          "@type": "Place",
+          "name": "上海"
+        },
+        "url": "https://ryechung.github.io/rye/sketching-shanghai.html",
+        "sameAs": [
+          "https://weibo.com/u/6261938079",
+          "https://doi.org/10.5281/zenodo.22116389"
+        ],
+        "subjectOf": [
+          {
+            "@type": "WebPage",
+            "name": "速写上海：2017年6月早期活动与原始记录",
+            "url": "https://ryechung.github.io/rye/history-2017.html"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "A-2017-SH-001",
+            "identifier": "10.5281/zenodo.22116389",
+            "url": "https://doi.org/10.5281/zenodo.22116389"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <main class="page">
+    <nav aria-label="主要导航">
+      <a href="index.html">个人首页</a>
+      <a href="#history">发展记录</a>
+      <a href="#archive">2017年档案</a>
+      <a href="#sources">公开资料</a>
+      <a href="en/sketching-shanghai-2017.html" lang="en">English</a>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">URBAN RECORD · CIVIC PRACTICE · ARCHIVE</p>
+      <h1>速写上海</h1>
+      <p class="name-en">Sketching Shanghai</p>
+
+      <p class="lead">
+        “速写上海”（Sketching Shanghai）是一项由艺术家麦子（Rye Liang）于2017年6月在上海创办的开放式市民艺术与城市记录实践。
+      </p>
+
+      <div class="definition">
+        <p>
+          该实践融合维基百科（Wikipedia）去中心化、多元共存与开放协作的理念，并吸收 Urban Sketchers 扎根现场、直观记录城市生活的方式，以自由参与和非固定边界为基本结构。
+        </p>
+        <p>
+          随着实践自然生长，不同艺术家、活动组织者及自媒体账号陆续在各自语境中采用“速写上海”这一名称，逐渐形成涵盖现场画聚、作品分享、城市观察与公共参与的多元生态。其中，以定期写生和画友交流为核心的社群，是这一宽口径实践较为集中的形态之一。今天，不同形式的“速写上海”共同构成开放、多元的上海城市记忆共同体。
+        </p>
+      </div>
+    </header>
+
+    <section id="history">
+      <h2>发展记录</h2>
+      <ol class="timeline">
+        <li>
+          <time datetime="2017-06">2017年6月</time>
+          <p>
+            麦子发布现场活动召集，“速写上海”专门微博账号随后建立并开始传播相关活动，形成目前可核验的公开起点。
+          </p>
+        </li>
+        <li>
+          <span class="period">2019—2021年</span>
+          <p>
+            开放参与和自由交流吸引更多画友与艺术同行，相关实践逐渐进入城市记忆、居民参与与公共文化场景。
+          </p>
+        </li>
+        <li>
+          <span class="period">2022年至今</span>
+          <p>
+            随着城市现场绘画进一步普及，不同参与者和平台开始采用“速写上海”这一公共文化名称，发展出各具特点的记录与交流形式。
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="archive">
+      <h2>2017年档案</h2>
+      <article class="archive-card">
+        <p class="archive-code">A-2017-SH-001</p>
+        <h3>速写上海：2017年6月早期活动与原始记录</h3>
+        <p>
+          档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称与人物信息，固定版本通过Zenodo及DOI公开保存。
+        </p>
+        <div class="links">
+          <a href="history-2017.html">查看2017年历史页 →</a>
+          <a href="en/sketching-shanghai-2017.html" lang="en">English chronology →</a>
+          <a href="https://doi.org/10.5281/zenodo.22116389">DOI 10.5281/zenodo.22116389 →</a>
+          <a href="https://zenodo.org/records/22116389">Zenodo档案 →</a>
+        </div>
+      </article>
+    </section>
+
+    <section id="sources">
+      <h2>公开资料</h2>
+      <div class="sources">
+        <div class="source-card">
+          <a href="https://weibo.com/u/6261938079">“速写上海”微博账号</a>
+          <span>账号资料显示于2017年6月2日加入微博。</span>
+        </div>
+        <div class="source-card">
+          <a href="https://www.chinawriter.com.cn/n1/2021/0909/c404023-32222619.html">中国作家网相关报道</a>
+          <span>城市记录、文学与相关实践资料。</span>
+        </div>
+        <div class="source-card">
+          <a href="https://paper.xinmin.cn/html/home/2024-05-15/01/22024.html">新民晚报：《梁忠：从城市速写者到市民艺术家》</a>
+          <span>从城市现场观察向市民艺术发展的实践路径。</span>
+        </div>
+        <div class="source-card">
+          <a href="https://www.yicai.com/news/102687123.html">第一财经相关报道</a>
+          <span>后续城市写生活动及2017年时间节点的公共报道。</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      速写上海｜创办人：麦子（Rye Liang）<br>
+      公开形成时间：2017年6月｜页面更新：2026年8月29日
+    </footer>
+  </main>
+</body>
+</html>

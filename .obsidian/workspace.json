@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "---一脚我就.md",
+                "file": "archive-fiction/readme.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "---一脚我就"
+              "title": "readme"
             }
           }
         ]
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "---一脚我就.md",
+                "file": "archive-fiction/readme.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -199,11 +199,16 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "1a436d86221ee6d7",
+  "active": "bcefdb41ed8dfc0d",
   "lastOpenFiles": [
+    "evidence/evidence",
+    "evidence/archival fiction",
+    "evidence/新建文件夹",
+    "archive-fiction/archival fiction",
+    "archive-fiction/evidence",
+    "---一脚我就.md",
     "A-2017-SH-003_速写上海微博账号_2017-06-02加入微博.png",
     "evidence/2017/weibo-first-post-2017-06-02.png.png",
-    "evidence/2017/weibo-account-2017-06-02.png",
-    "---一脚我就.md"
+    "evidence/2017/weibo-account-2017-06-02.png"
   ]
 }

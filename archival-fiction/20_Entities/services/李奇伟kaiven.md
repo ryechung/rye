@@ -1,0 +1,22 @@
+---
+type: person
+name: 李奇伟kaiven
+phone: "13601875762"
+aliases:
+  - "+8613601875762"
+  - "13601875762"
+tags:
+  - entities/person
+related_to: "[[梁忠]]"
+relation_type: 微信通讯录
+relation_tier: 3
+---
+
+# 李奇伟kaiven
+
+- **主要电话**：13601875762
+
+---
+
+## 往来记录
+*(无需手动录入，在 Obsidian 右侧“反向链接”面板中即可自动汇聚与该人物相关的所有短信)*

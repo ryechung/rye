@@ -1,0 +1,34 @@
+---
+type: organization
+name: Tripadvisor
+aliases:
+channel_types:
+  - sms_gateway
+service_numbers:
+sender_ids:
+  - "10682576119300751109"
+  - "10683917767700751109"
+review: false
+tags:
+  - entities/organization
+  - source/sms
+  - graph/low-priority
+graph_priority: low
+relation_tier: 3
+---
+
+# Tripadvisor
+
+- **识别来源**：短信正文中的固定机构签名
+- **关联会话**：2 个发送号码，2 条短信
+
+## 短信发送号码
+
+- `10682576119300751109`
+- `10683917767700751109`
+
+---
+
+## 往来记录
+
+可在 Obsidian 的反向链接面板中查看已关联的短信会话。

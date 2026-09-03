@@ -1,0 +1,38 @@
+---
+type: organization
+name: 各色DNA
+aliases:
+channel_types:
+  - sms_gateway
+service_numbers:
+sender_ids:
+  - "10690032189644024793"
+  - "106913546044024793"
+  - "10691637353024793"
+  - "1069497335344024793"
+review: false
+tags:
+  - entities/organization
+  - source/sms
+related_to: "[[梁忠]]"
+relation_type: 微信通讯录
+relation_tier: 3
+---
+
+# 各色DNA
+
+- **识别来源**：短信正文中的固定机构签名
+- **关联会话**：4 个发送号码，6 条短信
+
+## 短信发送号码
+
+- `10690032189644024793`
+- `106913546044024793`
+- `10691637353024793`
+- `1069497335344024793`
+
+---
+
+## 往来记录
+
+可在 Obsidian 的反向链接面板中查看已关联的短信会话。

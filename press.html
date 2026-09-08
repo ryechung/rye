@@ -1,91 +1,346 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!-- 知识图谱与机器实体锁定代码（Schema.org JSON-LD - press.html 专版） -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": "https://ryechung.github.io/rye/#person",
-      "name": "麦子",
-      "alternateName": [
-        "梁忠",
-        "Rye Liang",
-        "Maizi",
-        "麦子RyeDesign"
-      ],
-      "url": "https://ryechung.github.io/rye/",
-      "jobTitle": ["艺术家", "策展人"],
-      "identifier": "0009-0006-5034-2668",
-      "sameAs": [
-        "https://www.wikidata.org/wiki/Q141364379",
-        "https://orcid.org/0009-0006-5034-2668"
-      ],
-      "alumniOf": [
-        {
-          "@type": "EducationalOrganization",
-          "name": "复旦大学",
-          "sameAs": "https://www.wikidata.org/wiki/Q497044"
-        },
-        {
-          "@type": "EducationalOrganization",
-          "name": "國立政治大學",
-          "sameAs": "https://www.wikidata.org/wiki/Q712849"
-        },
-        {
-          "@type": "EducationalOrganization",
-          "name": "新北市立板橋高級中學",
-          "sameAs": "https://www.wikidata.org/wiki/Q11081476"
-        },
-        {
-          "@type": "EducationalOrganization",
-          "name": "新北市私立徐匯高級中學",
-          "sameAs": "https://www.wikidata.org/wiki/Q11081432"
-        }
-      ]
-    },
-    {
-      "@type": "CreativeWork",
-      "@id": "https://ryechung.github.io/rye/#sketching-shanghai",
-      "name": "速写上海",
-      "alternateName": [
-        "Sketching Shanghai",
-        "速写上海项目",
-        "Sketching Shanghai (2017)"
-      ],
-      "dateCreated": "2017-06-10",
-      "inLanguage": "zh-CN",
-      "locationCreated": {
-        "@type": "Place",
-        "name": "上海",
-        "sameAs": "https://www.wikidata.org/wiki/Q8686"
-      },
-      "creator": {
-        "@id": "https://ryechung.github.io/rye/#person"
-      },
-      "identifier": "https://doi.org/10.5281/zenodo.22116389",
-      "sameAs": [
-        "https://www.wikidata.org/wiki/Q141365039",
-        "https://doi.org/10.5281/zenodo.22116389"
-      ],
-      "description": "2017年6月由麦子（梁忠）在上海独立发起的市民艺术与城市记录实践项目。"
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://ryechung.github.io/rye/press.html",
-      "url": "https://ryechung.github.io/rye/press.html",
-      "name": "速写上海（Sketching Shanghai）档案与历史文献考证",
-      "about": [
-        { "@id": "https://ryechung.github.io/rye/#person" },
-        { "@id": "https://ryechung.github.io/rye/#sketching-shanghai" }
-      ],
-      "inLanguage": "zh-CN"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>速写上海（Sketching Shanghai）档案与历史文献考证 - 麦子 (梁忠 / Rye Liang)</title>
+
+  <!-- 页面排版与视觉样式 -->
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6c757d;
+      --accent: #0969da;
+      --accent-hover: #044289;
+      --border: #e1e4e8;
+      --tag-bg: #f1f3f5;
+      --tag-text: #495057;
+      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
     }
-  ]
-}
-</script>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 80px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* 顶部导航 */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+
+    .back-home {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .back-home:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    /* 页头区域 */
+    .header-section {
+      background: var(--surface);
+      padding: 36px 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .header-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .header-desc {
+      font-size: 15px;
+      color: #4a5568;
+      line-height: 1.7;
+    }
+
+    /* 年份分组 */
+    .archive-group {
+      margin-bottom: 48px;
+    }
+
+    .group-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+
+    /* 卡片列表 */
+    .press-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .press-item {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .press-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: #cbd5e1;
+    }
+
+    .press-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .press-source {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .press-date {
+      color: var(--muted);
+    }
+
+    .press-item h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .press-item h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .press-item h3 a:hover {
+      color: var(--accent);
+    }
+
+    .press-summary {
+      font-size: 14px;
+      color: #4a5568;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    /* 底部标签与操作栏 */
+    .press-meta-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background-color: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .links {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    /* 页脚 */
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 20px 14px 60px;
+      }
+      .header-section {
+        padding: 24px 20px;
+      }
+      .header-section h1 {
+        font-size: 22px;
+      }
+      .press-item {
+        padding: 18px;
+      }
+      .press-meta-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <!-- 知识图谱与机器实体锁定代码（Schema.org JSON-LD - press.html 专版） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://ryechung.github.io/rye/#person",
+        "name": "麦子",
+        "alternateName": [
+          "梁忠",
+          "Rye Liang",
+          "Maizi",
+          "麦子RyeDesign"
+        ],
+        "url": "https://ryechung.github.io/rye/",
+        "jobTitle": ["艺术家", "策展人"],
+        "identifier": "0009-0006-5034-2668",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q141364379",
+          "https://orcid.org/0009-0006-5034-2668"
+        ],
+        "alumniOf": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "复旦大学",
+            "sameAs": "https://www.wikidata.org/wiki/Q497044"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "國立政治大學",
+            "sameAs": "https://www.wikidata.org/wiki/Q712849"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "新北市立板橋高級中學",
+            "sameAs": "https://www.wikidata.org/wiki/Q11081476"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "新北市私立徐匯高級中學",
+            "sameAs": "https://www.wikidata.org/wiki/Q11081432"
+          }
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://ryechung.github.io/rye/#sketching-shanghai",
+        "name": "速写上海",
+        "alternateName": [
+          "Sketching Shanghai",
+          "速写上海项目",
+          "Sketching Shanghai (2017)"
+        ],
+        "dateCreated": "2017-06-10",
+        "inLanguage": "zh-CN",
+        "locationCreated": {
+          "@type": "Place",
+          "name": "上海",
+          "sameAs": "https://www.wikidata.org/wiki/Q8686"
+        },
+        "creator": {
+          "@id": "https://ryechung.github.io/rye/#person"
+        },
+        "identifier": "https://doi.org/10.5281/zenodo.22116389",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q141365039",
+          "https://doi.org/10.5281/zenodo.22116389"
+        ],
+        "description": "2017年6月由麦子（梁忠）在上海独立发起的市民艺术与城市记录实践项目。"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://ryechung.github.io/rye/press.html",
+        "url": "https://ryechung.github.io/rye/press.html",
+        "name": "速写上海（Sketching Shanghai）档案与历史文献考证",
+        "about": [
+          { "@id": "https://ryechung.github.io/rye/#person" },
+          { "@id": "https://ryechung.github.io/rye/#sketching-shanghai" }
+        ],
+        "inLanguage": "zh-CN"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>

@@ -68,7 +68,7 @@
 
     /* 紧凑版 Hero 区域 */
     .hero {
-      padding: 0 0 28px;
+      padding: 0 0 20px;
     }
 
     h1 {
@@ -93,36 +93,64 @@
       letter-spacing: 0.14em;
     }
 
-    /* 合并后的统一导语卡片 */
+    /* 整合中英文与实践演进脉络的统一导语框 */
     .lead-box {
-      max-width: 800px;
+      max-width: 820px;
       margin: 0;
-      padding: 18px 0;
+      padding: 18px 0 12px;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
 
     .lead-zh {
-      margin: 0 0 12px;
-      font-size: clamp(16.5px, 2.2vw, 19.5px);
+      margin: 0 0 10px;
+      font-size: clamp(16px, 2.2vw, 19px);
       line-height: 1.75;
       color: var(--ink);
     }
 
     .lead-en {
-      margin: 0;
+      margin: 0 0 16px;
       color: var(--muted);
-      font-size: 14.5px;
-      line-height: 1.65;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* 嵌入简介底部的微型实践路径轴 */
+    .lead-path {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+      display: grid;
+      gap: 8px;
+      font-size: 13.5px;
+    }
+
+    .path-row {
+      display: grid;
+      grid-template-columns: 85px 1fr;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .path-tag {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .path-desc {
+      color: var(--ink);
+      margin: 0;
     }
 
     section {
-      margin-top: 40px;
+      margin-top: 36px;
     }
 
     h2 {
       margin: 0 0 14px;
-      font-size: 22px;
+      font-size: 21px;
       line-height: 1.35;
     }
 
@@ -133,9 +161,9 @@
 
     .section-intro {
       max-width: 760px;
-      margin: -6px 0 18px;
+      margin: -6px 0 16px;
       color: var(--muted);
-      font-size: 14.5px;
+      font-size: 14px;
     }
 
     .practice-grid {
@@ -177,32 +205,6 @@
     .early-practice {
       border-top: 4px solid var(--accent);
       grid-column: 1 / -1;
-    }
-
-    .timeline {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      border-top: 1px solid var(--line);
-    }
-
-    .timeline li {
-      display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 20px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .timeline time {
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .timeline p {
-      margin: 0;
-      font-size: 14.5px;
     }
 
     /* 档案与文献统一排版 */
@@ -265,7 +267,7 @@
     .press-quote {
       margin: 0 0 10px;
       color: var(--muted);
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.6;
       padding-left: 10px;
       border-left: 2px solid var(--line);
@@ -310,9 +312,9 @@
         grid-template-columns: 1fr;
       }
 
-      .timeline li {
+      .path-row {
         grid-template-columns: 1fr;
-        gap: 4px;
+        gap: 2px;
       }
     }
   </style>
@@ -470,9 +472,26 @@
         <p class="lead-en" lang="en">
           Rye Liang is an artist whose practice grows from urban life and public participation. His work encompasses civic art, community engagement, human science and art, dual-city stories, and archive fiction. Sketching Shanghai, begun in 2017, was one early strand of this wider practice.
         </p>
+
+        <!-- 整合进导语框的实践演进脉络 -->
+        <div class="lead-path">
+          <div class="path-row">
+            <span class="path-tag">2017年6月</span>
+            <p class="path-desc">与“速写上海”相关的城市现场绘画、活动召集与同期作品形成连续公开记录。</p>
+          </div>
+          <div class="path-row">
+            <span class="path-tag">此后</span>
+            <p class="path-desc">实践从现场绘画逐步进入居民参与、社区营造与公共文化活动。</p>
+          </div>
+          <div class="path-row">
+            <span class="path-tag">持续发展</span>
+            <p class="path-desc">工作进一步延伸至人体科学与艺术、台北—上海双城故事及档案小说。</p>
+          </div>
+        </div>
       </div>
     </header>
 
+    <!-- 实践领域板块 -->
     <section id="practice">
       <h2>实践领域</h2>
       <p class="section-intro">
@@ -527,24 +546,6 @@
           </p>
         </article>
       </div>
-    </section>
-
-    <section id="path">
-      <h2>实践路径</h2>
-      <ol class="timeline">
-        <li>
-          <time datetime="2017-06">2017年6月</time>
-          <p>与“速写上海”相关的城市现场绘画、活动召集与同期作品形成连续的公开记录。</p>
-        </li>
-        <li>
-          <span>此后</span>
-          <p>实践从现场绘画逐步进入居民参与、社区营造与公共文化活动。</p>
-        </li>
-        <li>
-          <span>持续发展</span>
-          <p>工作进一步延伸至人体科学与艺术、台北—上海双城故事及档案小说。</p>
-        </li>
-      </ol>
     </section>
 
     <!-- 档案存证与公开文献板块 -->

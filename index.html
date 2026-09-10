@@ -63,82 +63,79 @@
     .page {
       width: min(920px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 30px 0 60px;
+      padding: 36px 0 60px;
     }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 22px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-      font-size: 14px;
-    }
-
+    /* 紧凑版 Hero 区域 */
     .hero {
-      padding: 44px 0 32px;
+      padding: 0 0 28px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(36px, 6.5vw, 62px);
+      font-size: clamp(34px, 6vw, 56px);
       font-weight: 650;
       letter-spacing: -0.035em;
       line-height: 1.15;
     }
 
     .name-en {
-      margin: 4px 0 10px;
+      margin: 2px 0 6px;
       color: var(--muted);
-      font-size: clamp(18px, 2.8vw, 24px);
+      font-size: clamp(17px, 2.6vw, 22px);
     }
 
     .eyebrow {
-      margin: 0 0 22px;
+      margin: 0 0 16px;
       color: var(--accent);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.14em;
     }
 
-    .lead {
-      max-width: 780px;
+    /* 合并后的统一导语卡片 */
+    .lead-box {
+      max-width: 800px;
       margin: 0;
-      padding: 20px 0;
+      padding: 18px 0;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      font-size: clamp(17px, 2.3vw, 20.5px);
-      line-height: 1.8;
+    }
+
+    .lead-zh {
+      margin: 0 0 12px;
+      font-size: clamp(16.5px, 2.2vw, 19.5px);
+      line-height: 1.75;
+      color: var(--ink);
     }
 
     .lead-en {
-      max-width: 780px;
-      margin: 16px 0 0;
+      margin: 0;
       color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
+      font-size: 14.5px;
+      line-height: 1.65;
     }
 
     section {
-      margin-top: 48px;
+      margin-top: 40px;
     }
 
     h2 {
-      margin: 0 0 16px;
-      font-size: 23px;
+      margin: 0 0 14px;
+      font-size: 22px;
       line-height: 1.35;
     }
 
     h3 {
       margin: 0 0 8px;
-      font-size: 18px;
+      font-size: 17.5px;
     }
 
     .section-intro {
       max-width: 760px;
-      margin: -6px 0 20px;
+      margin: -6px 0 18px;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 14.5px;
     }
 
     .practice-grid {
@@ -155,7 +152,7 @@
     }
 
     .practice-card {
-      padding: 22px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -164,7 +161,7 @@
     .practice-card p {
       margin: 0;
       color: var(--muted);
-      font-size: 14.5px;
+      font-size: 14px;
     }
 
     .card-link {
@@ -193,29 +190,29 @@
       display: grid;
       grid-template-columns: 110px 1fr;
       gap: 20px;
-      padding: 16px 0;
+      padding: 14px 0;
       border-bottom: 1px solid var(--line);
     }
 
     .timeline time {
       color: var(--accent);
       font-weight: 700;
-      font-size: 14.5px;
+      font-size: 14px;
     }
 
     .timeline p {
       margin: 0;
-      font-size: 15px;
+      font-size: 14.5px;
     }
 
-    /* 档案与文献网格 */
+    /* 档案与文献统一排版 */
     .archive-unified-grid {
       display: grid;
       gap: 14px;
     }
 
     .archive-card {
-      padding: 22px 24px;
+      padding: 20px 22px;
       border-left: 4px solid var(--accent);
     }
 
@@ -223,7 +220,7 @@
       margin: 0 0 6px;
       color: var(--accent);
       font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
     }
 
@@ -231,8 +228,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px 18px;
-      margin-top: 14px;
-      font-size: 14px;
+      margin-top: 12px;
+      font-size: 13.5px;
     }
 
     .press-grid {
@@ -253,7 +250,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent);
       margin-bottom: 6px;
@@ -261,15 +258,15 @@
 
     .press-card h3 {
       margin: 0 0 8px;
-      font-size: 16.5px;
+      font-size: 16px;
       line-height: 1.4;
     }
 
     .press-quote {
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       color: var(--muted);
       font-size: 13.5px;
-      line-height: 1.65;
+      line-height: 1.6;
       padding-left: 10px;
       border-left: 2px solid var(--line);
     }
@@ -288,14 +285,14 @@
     }
 
     .press-more {
-      margin-top: 16px;
+      margin-top: 14px;
       text-align: right;
       font-size: 13.5px;
       font-weight: 600;
     }
 
     footer {
-      margin-top: 56px;
+      margin-top: 48px;
       padding-top: 20px;
       border-top: 1px solid var(--line);
       color: var(--muted);
@@ -305,11 +302,7 @@
     @media (max-width: 680px) {
       .page {
         width: min(100% - 32px, 920px);
-        padding-top: 20px;
-      }
-
-      .hero {
-        padding: 36px 0 24px;
+        padding-top: 24px;
       }
 
       .practice-grid,
@@ -335,8 +328,8 @@
         "name": "麦子／Rye Liang",
         "description": "麦子（Rye Liang）的个人实践主页，记录其市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说实践。",
         "inLanguage": ["zh-CN", "en"],
-        "dateCreated":"2026-08-25T00:00:00+08:00",
-        "dateModified":"2026-09-10T18:00:00+08:00",
+        "dateCreated": "2026-08-25T00:00:00+08:00",
+        "dateModified": "2026-09-10T18:00:00+08:00",
         "mainEntity": {
           "@id": "https://ryechung.github.io/rye/#rye-liang"
         }
@@ -465,26 +458,19 @@
 
 <body>
   <main class="page">
-    <nav aria-label="主要导航">
-      <a href="#about">关于</a>
-      <a href="#practice">实践领域</a>
-      <a href="#path">实践路径</a>
-      <a href="#archive">档案与文献</a>
-      <a href="en/sketching-shanghai-2017.html" lang="en">English</a>
-    </nav>
-
     <header class="hero" id="about">
       <h1>麦子</h1>
       <p class="name-en">Rye Liang</p>
       <p class="eyebrow">ARTIST · CIVIC PRACTICE · ARCHIVE</p>
 
-      <p class="lead">
-        麦子（Rye Liang）是一位以城市生活和公共参与为基础开展工作的创作者。其长期实践涉及市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说。“速写上海”是其自2017年展开的早期实践之一，现场绘画后来成为更广泛公共文化工作的组成部分。
-      </p>
-
-      <p class="lead-en" lang="en">
-        Rye Liang is an artist whose practice grows from urban life and public participation. His work encompasses civic art, community engagement, human science and art, dual-city stories, and archive fiction. Sketching Shanghai, begun in 2017, was one early strand of this wider practice.
-      </p>
+      <div class="lead-box">
+        <p class="lead-zh">
+          麦子（Rye Liang）是一位以城市生活和公共参与为基础开展工作的创作者。其长期实践涉及市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说。“速写上海”是其自2017年展开的早期实践之一，现场绘画后来成为更广泛公共文化工作的组成部分。
+        </p>
+        <p class="lead-en" lang="en">
+          Rye Liang is an artist whose practice grows from urban life and public participation. His work encompasses civic art, community engagement, human science and art, dual-city stories, and archive fiction. Sketching Shanghai, begun in 2017, was one early strand of this wider practice.
+        </p>
+      </div>
     </header>
 
     <section id="practice">

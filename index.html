@@ -93,7 +93,7 @@
 
     /* 紧凑版 Hero 区域 */
     .hero {
-      padding: 0 0 20px;
+      padding: 0 0 10px;
     }
 
     h1 {
@@ -169,8 +169,39 @@
       margin: 0;
     }
 
+    /* 纯图标点缀区 */
+    .social-accents {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 14px;
+      padding-top: 4px;
+    }
+
+    .social-icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: color 0.15s ease, transform 0.15s ease;
+      opacity: 0.75;
+    }
+
+    .social-icon-link:hover {
+      color: var(--accent);
+      opacity: 1;
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .social-icon-link svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
     section {
-      margin-top: 36px;
+      margin-top: 32px;
     }
 
     h2 {
@@ -318,35 +349,6 @@
       font-weight: 600;
     }
 
-    /* 联络与社交模块样式 */
-    .connect-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 14px;
-      margin-top: 14px;
-    }
-
-    .connect-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--card);
-      border: 1px solid #ddd6cc;
-      padding: 8px 16px;
-      border-radius: 2px;
-      color: var(--ink);
-      font-size: 13.5px;
-      font-weight: 500;
-      transition: all 0.15s ease;
-    }
-
-    .connect-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-
     footer {
       margin-top: 48px;
       padding-top: 20px;
@@ -373,15 +375,6 @@
       .path-row {
         grid-template-columns: 1fr;
         gap: 2px;
-      }
-
-      .connect-links {
-        gap: 8px;
-      }
-
-      .connect-btn {
-        flex: 1 1 calc(50% - 8px);
-        justify-content: center;
       }
     }
   </style>
@@ -420,7 +413,6 @@
           "https://baike.baidu.com/item/梁忠/68957538",
           "https://www.wikidata.org/wiki/Q141364379",
           "https://orcid.org/0009-0006-5034-2668",
-          "https://weibo.com/u/1820329095",
           "https://www.instagram.com/ryeliang",
           "https://www.facebook.com/rye.ad"
         ],
@@ -562,6 +554,22 @@
             <p class="path-desc">工作进一步延伸至人体科学与艺术、台北—上海双城故事及档案小说。</p>
           </div>
         </div>
+
+        <!-- 极简社交图标点缀 -->
+        <div class="social-accents">
+          <a href="https://www.instagram.com/ryeliang" target="_blank" rel="noopener" class="social-icon-link" aria-label="Instagram @ryeliang" title="Instagram @ryeliang">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/rye.ad" target="_blank" rel="noopener" class="social-icon-link" aria-label="Facebook rye.ad" title="Facebook rye.ad">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.19 6.5 12.92 6.5c.83 0 1.7.15 1.7.15v1.87h-.96c-.96 0-1.26.6-1.26 1.21V12h2.8l-.45 3h-2.35v6.8c4.56-.93 8-4.96 8-9.8z"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -690,26 +698,6 @@
 
       <div class="press-more">
         <a href="press.html">查看全部媒体报道与文献归档（2017—至今） →</a>
-      </div>
-    </section>
-
-    <!-- 联络与连接模块 -->
-    <section id="connect">
-      <h2>联络与连接</h2>
-      <p class="section-intro">
-        欢迎就公共策展、双城文化项目、社区营造、学术研讨与艺术实践交流联络。
-      </p>
-
-      <div class="connect-links">
-        <a href="https://www.instagram.com/ryeliang" target="_blank" rel="noopener" class="connect-btn">
-          <span>Instagram (@ryeliang)</span> ↗
-        </a>
-        <a href="https://www.facebook.com/rye.ad" target="_blank" rel="noopener" class="connect-btn">
-          <span>Facebook (rye.ad)</span> ↗
-        </a>
-        <a href="https://weibo.com/u/1820329095" target="_blank" rel="noopener" class="connect-btn">
-          <span>微博 (Weibo)</span> ↗
-        </a>
       </div>
     </section>
 

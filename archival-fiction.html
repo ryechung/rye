@@ -10,7 +10,7 @@
     content="档案小说《青年梁善进的奇妙冒险》，结合冷战航运档案、跨洋轨迹与口述历史考据的跨媒介叙事。全球学术存证 DOI: 10.5281/zenodo.22684643"
   >
 
-  <!-- 引入极简 Markdown 转换解析库 -->
+  <!-- 引入 Markdown 解析库 -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
@@ -208,11 +208,10 @@
       </p>
     </header>
 
-    <!-- 章节切换栏 -->
-    <div class="chapter-selector">
-      <span class="chapter-label">篇目选择：</span>
-      <button class="chapter-btn active" onclick="switchChapter(1, this)">第 001 篇：奥运前的东京街头</button>
-      <button class="chapter-btn" onclick="switchChapter(2, this)">第 002 篇：巴拿马的太阳</button>
+    <!-- 动态生成的章节切换栏 -->
+    <div class="chapter-selector" id="chapter-bar">
+      <span class="chapter-label">篇目索引：</span>
+      <span style="font-size: 13px; color: var(--muted);" id="loading-hint">正在同步仓库最新目录...</span>
     </div>
 
     <!-- 动态小说正文渲染卡片 -->
@@ -242,40 +241,85 @@
     </footer>
   </main>
 
-  <!-- 跨仓库动态拉取 Markdown 逻辑 -->
   <script>
-    const chapters = {
-      1: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20001%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%A5%A5%E8%BF%90%E5%89%8D%E7%9A%84%E4%B8%9C%E4%BA%AC%E8%A1%97%E5%A4%B4.md',
-      2: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20002%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%B7%B4%E6%8B%BF%E9%A9%AC%E7%9A%84%E5%A4%AA%E9%98%B3.md'
-    };
+    const API_REPO_URL = 'https://api.github.com/repos/ryechung/archival-fiction/contents/';
 
-    function switchChapter(chapId, btn) {
+    // 格式化按钮标题（去除冗余的前缀与扩展名）
+    function formatChapterTitle(fileName) {
+      let title = fileName.replace(/\.md$/i, '');
+      // 提取章节编号与主标题
+      const match = title.match(/(\d+)\s*青年梁善进的奇妙冒险[-–—]+(.+)/);
+      if (match) {
+        return `第 ${match[1]} 篇：${match[2].trim()}`;
+      }
+      return title;
+    }
+
+    // 载入正文内容
+    function fetchAndRender(downloadUrl, btnElement) {
       document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
+      if (btnElement) btnElement.classList.add('active');
 
-      const container = document.getElementById('novel-content');
-      container.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
+      const contentBox = document.getElementById('novel-content');
+      contentBox.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
 
-      fetch(chapters[chapId])
+      fetch(downloadUrl)
         .then(res => {
-          if (!res.ok) throw new Error('网络请求异常（' + res.status + '）');
+          if (!res.ok) throw new Error('网络请求状态异常：' + res.status);
           return res.text();
         })
-        .then(mdText => {
-          container.innerHTML = marked.parse(mdText);
+        .then(md => {
+          contentBox.innerHTML = marked.parse(md);
         })
         .catch(err => {
-          container.innerHTML = `
+          contentBox.innerHTML = `
             <p style="color: var(--accent);">
               正文加载失败（${err.message}）。<br>
-              您可以直接通过 <a href="https://github.com/ryechung/archival-fiction" target="_blank">GitHub 仓库源文件</a> 阅读。
+              您可以直接通过 <a href="https://github.com/ryechung/archival-fiction" target="_blank">GitHub 仓库源文件</a> 查阅。
             </p>`;
         });
     }
 
-    // 页面初次载入自动读取第一章
+    // 页面载入时自动从 GitHub API 读取仓库文件列表
     window.addEventListener('DOMContentLoaded', () => {
-      switchChapter(1, document.querySelector('.chapter-btn'));
+      const chapterBar = document.getElementById('chapter-bar');
+      const loadingHint = document.getElementById('loading-hint');
+
+      fetch(API_REPO_URL)
+        .then(res => res.json())
+        .then(files => {
+          // 过滤所有 Markdown 文件，排除 README
+          const chapterFiles = files.filter(f => 
+            f.type === 'file' && 
+            f.name.endsWith('.md') && 
+            !f.name.toLowerCase().startsWith('readme')
+          );
+
+          // 按文件名自然升序排序 (001 -> 002 -> 003)
+          chapterFiles.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true }));
+
+          loadingHint.remove();
+
+          if (chapterFiles.length === 0) {
+            chapterBar.innerHTML += '<span style="color: var(--muted);">暂无可读章节</span>';
+            return;
+          }
+
+          // 动态生成章节按钮
+          chapterFiles.forEach((file, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'chapter-btn' + (index === 0 ? ' active' : '');
+            btn.innerText = formatChapterTitle(file.name);
+            btn.onclick = () => fetchAndRender(file.download_url, btn);
+            chapterBar.appendChild(btn);
+          });
+
+          // 默认自动加载第一篇
+          fetchAndRender(chapterFiles[0].download_url, chapterBar.querySelector('.chapter-btn'));
+        })
+        .catch(err => {
+          loadingHint.innerHTML = '<span style="color: var(--accent);">目录加载失败，请刷新重试</span>';
+        });
     });
   </script>
 </body>

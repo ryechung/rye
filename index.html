@@ -22,9 +22,6 @@
   <meta property="og:type" content="profile">
   <meta property="og:url" content="https://ryechung.github.io/rye/">
 
-  <!-- 引入极简轻量 Markdown 解析库 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
   <style>
     :root {
       --paper: #f4f1eb;
@@ -156,11 +153,28 @@
 
     .practice-card {
       padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .practice-card p {
       margin: 0;
       color: var(--muted);
+    }
+
+    .card-link {
+      margin-top: 16px !important;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .card-link a {
+      color: var(--accent);
+    }
+
+    .card-link a:hover {
+      text-decoration: underline;
     }
 
     .early-practice {
@@ -192,11 +206,6 @@
       margin: 0;
     }
 
-    .archive-grid {
-      display: grid;
-      gap: 24px;
-    }
-
     .archive-card {
       padding: 28px;
       border-left: 4px solid var(--accent);
@@ -215,71 +224,6 @@
       flex-wrap: wrap;
       gap: 10px 22px;
       margin-top: 18px;
-    }
-
-    /* 章节选择按钮组 */
-    .chapter-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 16px 0;
-    }
-
-    .chapter-btn {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--ink);
-      padding: 8px 16px;
-      font-size: 14px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s ease;
-    }
-
-    .chapter-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .chapter-btn.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
-
-    /* 动态渲染阅读器 */
-    .novel-reader {
-      display: none;
-      margin-top: 20px;
-      padding: 24px 28px;
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 2px;
-    }
-
-    .novel-reader.active {
-      display: block;
-    }
-
-    .novel-reader-content {
-      font-size: 16px;
-      line-height: 1.9;
-    }
-
-    .novel-reader-content h1, 
-    .novel-reader-content h2, 
-    .novel-reader-content h3 {
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 8px;
-      margin-top: 24px;
-    }
-
-    .novel-reader-content blockquote {
-      margin: 16px 0;
-      padding: 8px 16px;
-      border-left: 4px solid var(--accent);
-      background: rgba(0,0,0,0.03);
-      color: var(--muted);
     }
 
     /* 媒体报道精选卡片 */
@@ -462,7 +406,7 @@
       <a href="#about">关于</a>
       <a href="#practice">实践领域</a>
       <a href="#path">实践路径</a>
-      <a href="#archive">档案与存证</a>
+      <a href="#archive">档案</a>
       <a href="#sources">公开资料</a>
       <a href="en/sketching-shanghai-2017.html" lang="en">English</a>
     </nav>
@@ -488,33 +432,48 @@
       </p>
 
       <div class="practice-grid">
+        <!-- 1. 市民艺术与社区营造 -->
         <article class="practice-card">
-          <h3>市民艺术与社区营造</h3>
-          <p>以居民参与、地方经验和共同创作为基础，使艺术成为社区关系与公共生活的一部分。</p>
+          <div>
+            <h3><a href="civic-art.html">市民艺术与社区营造</a></h3>
+            <p>以居民参与、地方经验和共同创作为基础，使艺术成为社区关系与公共生活的一部分。</p>
+          </div>
+          <p class="card-link"><a href="civic-art.html">点击了解 →</a></p>
         </article>
 
+        <!-- 2. 人体科学与艺术 -->
         <article class="practice-card">
-          <h3>人体科学与艺术</h3>
-          <p>关注身体、生命经验与艺术之间的关系，在科学观察与人文感知之间展开跨领域实践。</p>
+          <div>
+            <h3><a href="human-science-art.html">人体科学与艺术</a></h3>
+            <p>关注身体、生命经验与艺术之间的关系，在科学观察与人文感知之间展开跨领域实践。</p>
+          </div>
+          <p class="card-link"><a href="human-science-art.html">点击了解 →</a></p>
         </article>
 
+        <!-- 3. 台北—上海双城故事 -->
         <article class="practice-card">
-          <h3>台北—上海双城故事</h3>
-          <p>以人物、地方经验和城市记忆为线索，整理台北—上海之间持续生成的文化叙事。</p>
+          <div>
+            <h3><a href="dual-city.html">台北—上海双城故事</a></h3>
+            <p>以人物、地方经验和城市记忆为线索，整理台北—上海之间持续生成的文化叙事。</p>
+          </div>
+          <p class="card-link"><a href="dual-city.html">点击了解 →</a></p>
         </article>
 
+        <!-- 4. 档案小说（直通独立小说阅读页） -->
         <article class="practice-card">
-          <h3>档案小说</h3>
-          <p>以原始材料、时间记录与个人记忆为基础，探索档案、事实与文学叙事之间的关系。</p>
+          <div>
+            <h3><a href="archival-fiction.html">档案小说</a></h3>
+            <p>以原始材料、时间记录与个人记忆为基础，探索档案、事实与文学叙事之间的关系。</p>
+          </div>
+          <p class="card-link"><a href="archival-fiction.html">点击了解 →</a></p>
         </article>
 
+        <!-- 速写上海 早期实践 -->
         <article class="practice-card early-practice">
-          <h3>
-            <a href="sketching-shanghai.html">速写上海</a>
-          </h3>
-          <p>
-            2017年由麦子（Rye Liang）在上海创办的开放式市民艺术与城市记录实践。
-          </p>
+          <div>
+            <h3><a href="sketching-shanghai.html">速写上海</a></h3>
+            <p>2017年由麦子（Rye Liang）在上海创办的开放式市民艺术与城市记录实践。</p>
+          </div>
           <p style="margin-top: 14px;">
             <a href="sketching-shanghai.html">查看“速写上海”专题档案 →</a>
           </p>
@@ -541,56 +500,22 @@
     </section>
 
     <section id="archive">
-      <h2>档案与学术存证</h2>
-      <p class="section-intro">
-        所有阶段性创作与文献档案均建立版本控制，并通过 Zenodo 赋权全球永久 DOI，实现文本与事实的长期存证。
-      </p>
+      <h2>早期档案</h2>
 
-      <div class="archive-grid">
-        <!-- 档案小说卡片与即时阅读器 -->
-        <article class="archive-card">
-          <p class="archive-code">A-2026-FIC-001</p>
-          <h3>档案小说：《青年梁善进的奇妙冒险》</h3>
-          <p>
-            结合冷战航运档案、跨洋轨迹与口述历史考据的跨媒介叙事。点击下方章节可直接调取学术仓库的最新原文进行在线阅读：
-          </p>
+      <article class="archive-card">
+        <p class="archive-code">A-2017-SH-001</p>
+        <h3>速写上海：2017年6月早期活动与原始记录</h3>
+        <p>
+          该档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称和人物信息。固定版本通过Zenodo公开保存。
+        </p>
 
-          <!-- 章节选择切换按钮 -->
-          <div class="chapter-btns">
-            <button class="chapter-btn" onclick="loadChapter(1, this)">第 001 篇：奥运前的东京街头</button>
-            <button class="chapter-btn" onclick="loadChapter(2, this)">第 002 篇：巴拿马的太阳</button>
-          </div>
-
-          <!-- 在线阅读容器（由 JS 动态注入） -->
-          <div id="novel-reader" class="novel-reader">
-            <div id="reader-content" class="novel-reader-content">
-              <p style="color: var(--muted);">正在从学术存证库载入正文...</p>
-            </div>
-          </div>
-
-          <div class="archive-links">
-            <a href="https://doi.org/10.5281/zenodo.22684643" target="_blank" rel="noopener">DOI 10.5281/zenodo.22684643 →</a>
-            <a href="https://github.com/ryechung/archival-fiction" target="_blank" rel="noopener">查看 GitHub 源码库 →</a>
-            <a href="https://zenodo.org/records/22684643" target="_blank" rel="noopener">Zenodo 永久存证详情 →</a>
-          </div>
-        </article>
-
-        <!-- 速写上海 2017 早期档案卡片 -->
-        <article class="archive-card">
-          <p class="archive-code">A-2017-SH-001</p>
-          <h3>速写上海：2017年6月早期活动与原始记录</h3>
-          <p>
-            该档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称和人物信息。固定版本通过Zenodo公开保存。
-          </p>
-
-          <div class="archive-links">
-            <a href="history-2017.html">查看2017年历史页 →</a>
-            <a href="en/sketching-shanghai-2017.html" lang="en">English chronology →</a>
-            <a href="https://doi.org/10.5281/zenodo.22116389">DOI 10.5281/zenodo.22116389 →</a>
-            <a href="https://zenodo.org/records/22116389">查看Zenodo原始文件 →</a>
-          </div>
-        </article>
-      </div>
+        <div class="archive-links">
+          <a href="history-2017.html">查看2017年历史页 →</a>
+          <a href="en/sketching-shanghai-2017.html" lang="en">English chronology →</a>
+          <a href="https://doi.org/10.5281/zenodo.22116389" target="_blank" rel="noopener">DOI 10.5281/zenodo.22116389 →</a>
+          <a href="https://zenodo.org/records/22116389" target="_blank" rel="noopener">查看Zenodo原始文件 →</a>
+        </div>
+      </article>
     </section>
 
     <section id="sources">
@@ -647,51 +572,5 @@
       页面更新：2026年9月10日
     </footer>
   </main>
-
-  <!-- 跨仓库动态拉取与渲染脚本 -->
-  <script>
-    const chapterMap = {
-      1: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20001%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%A5%A5%E8%BF%90%E5%89%8D%E7%9A%84%E4%B8%9C%E4%BA%AC%E8%A1%97%E5%A4%B4.md',
-      2: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20002%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%B7%B4%E6%8B%BF%E9%A9%AC%E7%9A%84%E5%A4%AA%E9%98%B3.md'
-    };
-
-    let currentOpenChapter = null;
-
-    function loadChapter(chapterNum, btnElement) {
-      const reader = document.getElementById('novel-reader');
-      const content = document.getElementById('reader-content');
-      const buttons = document.querySelectorAll('.chapter-btn');
-
-      // 如果再次点击已打开的章节，则收起阅读器
-      if (currentOpenChapter === chapterNum && reader.classList.contains('active')) {
-        reader.classList.remove('active');
-        btnElement.classList.remove('active');
-        currentOpenChapter = null;
-        return;
-      }
-
-      // 更新按钮高亮
-      buttons.forEach(b => b.classList.remove('active'));
-      btnElement.classList.add('active');
-      currentOpenChapter = chapterNum;
-
-      // 展开阅读器并显示加载状态
-      reader.classList.add('active');
-      content.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
-
-      // 跨仓库调取 Raw Markdown 文本
-      fetch(chapterMap[chapterNum])
-        .then(res => {
-          if (!res.ok) throw new Error('网络请求异常');
-          return res.text();
-        })
-        .then(md => {
-          content.innerHTML = marked.parse(md);
-        })
-        .catch(err => {
-          content.innerHTML = '<p style="color: var(--accent);">无法读取文本，请检查网络或直接访问 GitHub 仓库阅读。</p>';
-        });
-    }
-  </script>
 </body>
 </html>

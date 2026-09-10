@@ -1,0 +1,46 @@
+const README_URL = "https://raw.githubusercontent.com/ryechung/archival-fiction/main/README.md";
+  const RAW_BASE_URL = "https://raw.githubusercontent.com/ryechung/archival-fiction/main/";
+
+  fetch(README_URL)
+    .then(res => res.text())
+    .then(readmeText => {
+      // 提取形如: - **[001 标题](./文件名.md)** 的 Markdown 链接
+      const regex = /\[(.*?)\]\(\.\/(.*?\.md)\)/g;
+      const chapters = [];
+      let match;
+      while ((match = regex.exec(readmeText)) !== null) {
+        chapters.push({
+          title: match[1],
+          fileName: decodeURIComponent(match[2])
+        });
+      }
+
+      const btnGroup = document.getElementById('btn-group');
+      btnGroup.innerHTML = '';
+
+      chapters.forEach((chap, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
+        btn.innerText = chap.title;
+        btn.onclick = () => loadChapter(chap, btn);
+        btnGroup.appendChild(btn);
+      });
+
+      if (chapters.length > 0) {
+        loadChapter(chapters[0], btnGroup.children[0]);
+      }
+    });
+
+  function loadChapter(chap, activeBtn) {
+    document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const contentBox = document.getElementById('novel-content');
+    contentBox.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
+
+    fetch(RAW_BASE_URL + encodeURIComponent(chap.fileName))
+      .then(res => res.text())
+      .then(mdText => {
+        contentBox.innerHTML = marked.parse(mdText);
+      });
+  }

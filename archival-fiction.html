@@ -10,7 +10,7 @@
     content="档案小说《青年梁善进的奇妙冒险》，结合冷战航运档案、跨洋轨迹与口述历史考据的跨媒介叙事。全球学术存证 DOI: 10.5281/zenodo.22684643"
   >
 
-  <!-- 引入 Markdown 解析库 -->
+  <!-- 引入 Marked.js 用于解析 Markdown -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <style>
@@ -85,7 +85,7 @@
     }
 
     /* 章节选择栏 */
-    .chapter-selector {
+    .chapter-nav {
       margin: 32px 0 24px;
       display: flex;
       flex-wrap: wrap;
@@ -128,7 +128,7 @@
       background: var(--card);
       border: 1px solid #ddd6cc;
       padding: clamp(24px, 5vw, 48px);
-      margin-top: 10px;
+      min-height: 300px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     }
 
@@ -208,22 +208,22 @@
       </p>
     </header>
 
-    <!-- 动态生成的章节切换栏 -->
-    <div class="chapter-selector" id="chapter-bar">
+    <!-- 篇目选择导航区 -->
+    <div class="chapter-nav">
       <span class="chapter-label">篇目索引：</span>
-      <span style="font-size: 13px; color: var(--muted);" id="loading-hint">正在同步仓库最新目录...</span>
+      <div id="btn-group" style="display: inline-flex; gap: 10px; flex-wrap: wrap;"></div>
     </div>
 
-    <!-- 动态小说正文渲染卡片 -->
+    <!-- 正文渲染阅读区 -->
     <article class="reader-card">
       <div id="novel-content" class="reader-body">
         <p style="color: var(--muted);">正在从学术存证库载入正文...</p>
       </div>
     </article>
 
-    <!-- 学术存证与引用规范元数据 -->
+    <!-- 学术存证卡片 -->
     <section class="doi-box">
-      <h4>🏛️ 学术存证与版权声明</h4>
+      <h4>🏛️ 学术存证与引用规范</h4>
       <p>
         本作品所有发布版本均已在 Zenodo 欧洲核子研究中心（CERN）服务器永久锁定快照并赋权全球 DOI。
       </p>
@@ -242,84 +242,71 @@
   </main>
 
   <script>
-    const API_REPO_URL = 'https://api.github.com/repos/ryechung/archival-fiction/contents/';
-
-    // 格式化按钮标题（去除冗余的前缀与扩展名）
-    function formatChapterTitle(fileName) {
-      let title = fileName.replace(/\.md$/i, '');
-      // 提取章节编号与主标题
-      const match = title.match(/(\d+)\s*青年梁善进的奇妙冒险[-–—]+(.+)/);
-      if (match) {
-        return `第 ${match[1]} 篇：${match[2].trim()}`;
+    // 章节文件清单（以后新增篇目只需在此追加一行）
+    const CHAPTERS = [
+      {
+        id: 1,
+        title: "第 001 篇：奥运前的东京街头",
+        fileName: "档案小说 001 青年梁善进的奇妙冒险--奥运前的东京街头.md"
+      },
+      {
+        id: 2,
+        title: "第 002 篇：巴拿马的太阳",
+        fileName: "档案小说 002 青年梁善进的奇妙冒险--巴拿马的太阳.md"
       }
-      return title;
+    ];
+
+    const RAW_BASE_URL = "https://raw.githubusercontent.com/ryechung/archival-fiction/main/";
+
+    // 渲染篇目按钮
+    function initButtons() {
+      const btnGroup = document.getElementById('btn-group');
+      btnGroup.innerHTML = '';
+
+      CHAPTERS.forEach((chap, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
+        btn.innerText = chap.title;
+        btn.onclick = () => loadChapter(chap, btn);
+        btnGroup.appendChild(btn);
+      });
     }
 
-    // 载入正文内容
-    function fetchAndRender(downloadUrl, btnElement) {
+    // 抓取并渲染对应篇目 Markdown
+    function loadChapter(chap, activeBtn) {
       document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
-      if (btnElement) btnElement.classList.add('active');
+      if (activeBtn) activeBtn.classList.add('active');
 
       const contentBox = document.getElementById('novel-content');
       contentBox.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
 
-      fetch(downloadUrl)
+      // 自动转义中文与空格，确保 URL 完全合规
+      const targetUrl = RAW_BASE_URL + encodeURIComponent(chap.fileName);
+
+      fetch(targetUrl)
         .then(res => {
-          if (!res.ok) throw new Error('网络请求状态异常：' + res.status);
+          if (!res.ok) throw new Error(`HTTP 状态码 ${res.status}`);
           return res.text();
         })
-        .then(md => {
-          contentBox.innerHTML = marked.parse(md);
+        .then(mdText => {
+          contentBox.innerHTML = marked.parse(mdText);
         })
         .catch(err => {
           contentBox.innerHTML = `
-            <p style="color: var(--accent);">
-              正文加载失败（${err.message}）。<br>
-              您可以直接通过 <a href="https://github.com/ryechung/archival-fiction" target="_blank">GitHub 仓库源文件</a> 查阅。
-            </p>`;
+            <div style="padding: 16px; border-left: 3px solid var(--accent); background: var(--paper);">
+              <p style="color: var(--accent); margin: 0 0 8px; font-weight: 700;">正文读取失败（${err.message}）</p>
+              <p style="margin: 0; font-size: 14px; color: var(--muted);">
+                可能由于网络波动或 GitHub 原始节点延迟。您可以直接访问 
+                <a href="https://github.com/ryechung/archival-fiction" target="_blank" rel="noopener">GitHub 档案库源文件</a> 阅读。
+              </p>
+            </div>`;
         });
     }
 
-    // 页面载入时自动从 GitHub API 读取仓库文件列表
+    // 初始化
     window.addEventListener('DOMContentLoaded', () => {
-      const chapterBar = document.getElementById('chapter-bar');
-      const loadingHint = document.getElementById('loading-hint');
-
-      fetch(API_REPO_URL)
-        .then(res => res.json())
-        .then(files => {
-          // 过滤所有 Markdown 文件，排除 README
-          const chapterFiles = files.filter(f => 
-            f.type === 'file' && 
-            f.name.endsWith('.md') && 
-            !f.name.toLowerCase().startsWith('readme')
-          );
-
-          // 按文件名自然升序排序 (001 -> 002 -> 003)
-          chapterFiles.sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN', { numeric: true }));
-
-          loadingHint.remove();
-
-          if (chapterFiles.length === 0) {
-            chapterBar.innerHTML += '<span style="color: var(--muted);">暂无可读章节</span>';
-            return;
-          }
-
-          // 动态生成章节按钮
-          chapterFiles.forEach((file, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'chapter-btn' + (index === 0 ? ' active' : '');
-            btn.innerText = formatChapterTitle(file.name);
-            btn.onclick = () => fetchAndRender(file.download_url, btn);
-            chapterBar.appendChild(btn);
-          });
-
-          // 默认自动加载第一篇
-          fetchAndRender(chapterFiles[0].download_url, chapterBar.querySelector('.chapter-btn'));
-        })
-        .catch(err => {
-          loadingHint.innerHTML = '<span style="color: var(--accent);">目录加载失败，请刷新重试</span>';
-        });
+      initButtons();
+      loadChapter(CHAPTERS[0], document.querySelector('.chapter-btn'));
     });
   </script>
 </body>

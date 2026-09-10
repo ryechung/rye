@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>档案小说：《青年梁善进的奇妙冒险》｜麦子 Rye Liang</title>
+  <meta
+    name="description"
+    content="档案小说《青年梁善进的奇妙冒险》，结合冷战航运档案、跨洋轨迹与口述历史考据的跨媒介叙事。全球学术存证 DOI: 10.5281/zenodo.22684643"
+  >
+
+  <!-- 引入极简 Markdown 转换解析库 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    :root {
+      --paper: #f4f1eb;
+      --card: #ffffff;
+      --ink: #202020;
+      --muted: #67645f;
+      --line: #cbc4b9;
+      --link: #315d88;
+      --accent: #8b2b25;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: min(880px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+    .back-nav {
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .header {
+      padding: 48px 0 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 650;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* 章节选择栏 */
+    .chapter-selector {
+      margin: 32px 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chapter-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .chapter-btn {
+      background: var(--card);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      padding: 10px 18px;
+      font-size: 14.5px;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .chapter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .chapter-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* 正文阅读卡片 */
+    .reader-card {
+      background: var(--card);
+      border: 1px solid #ddd6cc;
+      padding: clamp(24px, 5vw, 48px);
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .reader-body {
+      font-size: 16.5px;
+      line-height: 2;
+    }
+
+    .reader-body h1, 
+    .reader-body h2, 
+    .reader-body h3 {
+      color: var(--ink);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-top: 32px;
+    }
+
+    .reader-body p {
+      margin: 1.4em 0;
+      text-align: justify;
+    }
+
+    .reader-body blockquote {
+      margin: 20px 0;
+      padding: 12px 20px;
+      border-left: 4px solid var(--accent);
+      background: var(--paper);
+      color: var(--muted);
+    }
+
+    .reader-body hr {
+      border: 0;
+      border-top: 1px dashed var(--line);
+      margin: 36px 0;
+    }
+
+    /* 存证信息卡片 */
+    .doi-box {
+      margin-top: 48px;
+      padding: 24px;
+      background: var(--paper);
+      border-left: 4px solid var(--accent);
+      font-size: 14px;
+    }
+
+    .doi-box h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .doi-box p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="back-nav">
+      <a href="index.html">← 返回首页</a>
+    </div>
+
+    <header class="header">
+      <p class="eyebrow">ARCHIVAL FICTION · 档案小说与历史存证</p>
+      <h1>《青年梁善进的奇妙冒险》</h1>
+      <p class="subtitle">
+        结合冷战航运档案、都市空间变迁与口述历史考据的跨媒介叙事
+      </p>
+    </header>
+
+    <!-- 章节切换栏 -->
+    <div class="chapter-selector">
+      <span class="chapter-label">篇目选择：</span>
+      <button class="chapter-btn active" onclick="switchChapter(1, this)">第 001 篇：奥运前的东京街头</button>
+      <button class="chapter-btn" onclick="switchChapter(2, this)">第 002 篇：巴拿马的太阳</button>
+    </div>
+
+    <!-- 动态小说正文渲染卡片 -->
+    <article class="reader-card">
+      <div id="novel-content" class="reader-body">
+        <p style="color: var(--muted);">正在从学术存证库载入正文...</p>
+      </div>
+    </article>
+
+    <!-- 学术存证与引用规范元数据 -->
+    <section class="doi-box">
+      <h4>🏛️ 学术存证与版权声明</h4>
+      <p>
+        本作品所有发布版本均已在 Zenodo 欧洲核子研究中心（CERN）服务器永久锁定快照并赋权全球 DOI。
+      </p>
+      <div>
+        <strong>永久解析 DOI：</strong>
+        <a href="https://doi.org/10.5281/zenodo.22684643" target="_blank" rel="noopener">10.5281/zenodo.22684643</a>
+        ｜
+        <a href="https://github.com/ryechung/archival-fiction" target="_blank" rel="noopener">查看 GitHub 源码库</a>
+      </div>
+    </section>
+
+    <footer>
+      麦子（梁忠／Rye Liang）个人实践与档案主页<br>
+      页面更新：2026年9月10日
+    </footer>
+  </main>
+
+  <!-- 跨仓库动态拉取 Markdown 逻辑 -->
+  <script>
+    const chapters = {
+      1: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20001%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%A5%A5%E8%BF%90%E5%89%8D%E7%9A%84%E4%B8%9C%E4%BA%AC%E8%A1%97%E5%A4%B4.md',
+      2: 'https://raw.githubusercontent.com/ryechung/archival-fiction/main/%E6%A1%A3%E6%A1%88%E5%B0%8F%E8%AF%B4%20002%20%E9%9D%92%E5%B9%B4%E6%A2%81%E5%96%84%E8%BF%9B%E7%9A%84%E5%A5%87%E5%A6%99%E5%86%92%E9%99%A9--%E5%B7%B4%E6%8B%BF%E9%A9%AC%E7%9A%84%E5%A4%AA%E9%98%B3.md'
+    };
+
+    function switchChapter(chapId, btn) {
+      document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const container = document.getElementById('novel-content');
+      container.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
+
+      fetch(chapters[chapId])
+        .then(res => {
+          if (!res.ok) throw new Error('网络请求异常（' + res.status + '）');
+          return res.text();
+        })
+        .then(mdText => {
+          container.innerHTML = marked.parse(mdText);
+        })
+        .catch(err => {
+          container.innerHTML = `
+            <p style="color: var(--accent);">
+              正文加载失败（${err.message}）。<br>
+              您可以直接通过 <a href="https://github.com/ryechung/archival-fiction" target="_blank">GitHub 仓库源文件</a> 阅读。
+            </p>`;
+        });
+    }
+
+    // 页面初次载入自动读取第一章
+    window.addEventListener('DOMContentLoaded', () => {
+      switchChapter(1, document.querySelector('.chapter-btn'));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>时空圆柱与地理图谱 (1895—2026)｜麦子 Rye Liang</title>
+  <meta name="description" content="1895—2026年家族双系源头、四代主体迁徙、消隐与全球流动的时空拓扑模型。">
+
+  <!-- Three.js 3D 引擎与控制器 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      --bg: #000000;
+      --card: rgba(8, 8, 12, 0.94);
+      --line: #38384c;
+      --text: #ffffff;
+      --muted: #a4a096;
+      --accent: #ff3b30;
+      --gold: #ffd60a;
+      --pin-color: #d4a373;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #webgl-container {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* 顶部标题与返回按钮 */
+    .top-overlay {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+    }
+
+    .title-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 4px;
+      backdrop-filter: blur(14px);
+      pointer-events: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.85);
+    }
+
+    .title-box h1 {
+      margin: 0 0 3px;
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+
+    .title-box p {
+      margin: 0;
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .nav-back {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      pointer-events: auto;
+      backdrop-filter: blur(14px);
+      transition: all 0.2s ease;
+    }
+    .nav-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* 右侧一体化时间控制舱与大头钉标本舱 */
+    .right-dock {
+      position: absolute;
+      top: 72px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 250px;
+      max-height: calc(100vh - 90px);
+      overflow-y: auto;
+      pointer-events: auto;
+      scrollbar-width: none;
+    }
+    .right-dock::-webkit-scrollbar { display: none; }
+
+    .dock-panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      border-radius: 6px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 32px rgba(0,0,0,0.85);
+    }
+
+    .year-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .year-label {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .current-year-display {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 12px rgba(255,255,255,0.4);
+    }
+
+    .btn-play-toggle {
+      width: 100%;
+      background: #14141c;
+      border: 1px solid #4a4a60;
+      color: #ffffff;
+      padding: 4px;
+      border-radius: 3px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-play-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .slider-bounds {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--muted);
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    /* 留言与大头钉面板 */
+    .echo-title {
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .echo-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-label {
+      font-size: 10px;
+      color: #b0afab;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: -2px;
+    }
+
+    select, input[type="number"], input[type="text"], textarea {
+      background: #12121a;
+      border: 1px solid #424256;
+      padding: 4px 6px;
+      border-radius: 3px;
+      font-size: 10.5px;
+      color: #ffffff;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 38px;
+      line-height: 1.35;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .btn-submit-pin {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      padding: 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-submit-pin:hover {
+      background: #ffe552;
+      box-shadow: 0 0 10px rgba(255, 214, 10, 0.4);
+    }
+
+    .admin-bar {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed #2a2a3a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .admin-toggle {
+      background: #1c1c28;
+      border: 1px solid #444;
+      color: #ccc;
+      padding: 2px 6px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 9.5px;
+    }
+    .admin-toggle.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .pin-list-title {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .pin-item {
+      background: #101018;
+      border-left: 2px solid var(--pin-color);
+      padding: 5px 7px;
+      margin-top: 4px;
+      border-radius: 2px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .pin-item:hover {
+      background: #181824;
+      border-left-color: var(--gold);
+    }
+
+    .pin-item-head {
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1px;
+    }
+
+    .pin-item-body {
+      color: #b0afab;
+      line-height: 1.3;
+      word-break: break-all;
+    }
+
+    .btn-delete-pin {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(255,59,48,0.8);
+      color: #fff;
+      border: none;
+      font-size: 9px;
+      padding: 1px 4px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: none;
+    }
+    .pin-item.admin-mode .btn-delete-pin {
+      display: block;
+    }
+
+    #pin-tooltip-card {
+      position: absolute;
+      z-index: 25;
+      background: rgba(8, 8, 14, 0.96);
+      border: 1px solid var(--pin-color);
+      padding: 10px 14px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 11px;
+      max-width: 250px;
+      line-height: 1.45;
+      pointer-events: none;
+      display: none;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 30px rgba(212, 163, 115, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .right-dock {
+        width: 170px;
+        top: auto;
+        bottom: 16px;
+        right: 12px;
+        max-height: 45vh;
+      }
+      .title-box { max-width: 55vw; }
+      .title-box h1 { font-size: 12px; }
+      .title-box p { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="webgl-container"></div>
+  <div id="pin-tooltip-card"></div>
+
+  <!-- 顶部标题 -->
+  <div class="top-overlay">
+    <div class="title-box">
+      <h1>时空圆柱与地理图谱 (1895—2026)</h1>
+      <p>以闽台沪为中心 · 台湾岛内紧凑对齐 · 带有清晰地名</p>
+    </div>
+    <a href="index.html" class="nav-back">← 返回主页</a>
+  </div>
+
+  <!-- 右侧悬浮控制舱 -->
+  <div class="right-dock">
+    <!-- 时间播放控制 -->
+    <div class="dock-panel">
+      <div class="year-header">
+        <span class="year-label">年份</span>
+        <span class="current-year-display" id="year-val">1895</span>
+      </div>
+
+      <button class="btn-play-toggle" id="btn-play" onclick="togglePlay()">暂停播放 ❚❚</button>
+
+      <div class="slider-container">
+        <input type="range" id="year-slider" min="1895" max="2026" value="1895" step="0.1">
+        <div class="slider-bounds">
+          <span>1895</span>
+          <span>从容循环</span>
+          <span>2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 读者大头钉留名面板 -->
+    <div class="dock-panel dock-echo">
+      <div class="echo-title">
+        <span>📌 留下你的时空大头钉</span>
+      </div>
+      
+      <div class="echo-input-group">
+        <div>
+          <div class="input-label"><span>选择地点</span></div>
+          <select id="user-city">
+            <option value="上海">上海</option>
+            <option value="台北">台北</option>
+            <option value="基隆">基隆</option>
+            <option value="高雄">高雄</option>
+            <option value="闽侯福州">闽侯福州</option>
+            <option value="香港">香港</option>
+            <option value="横滨">横滨</option>
+            <option value="神户">神户</option>
+            <option value="大阪">大阪</option>
+            <option value="釜山">釜山</option>
+            <option value="新加坡">新加坡</option>
+            <option value="科伦坡">科伦坡</option>
+            <option value="苏伊士">苏伊士</option>
+            <option value="马赛">马赛</option>
+            <option value="鹿特丹">鹿特丹</option>
+            <option value="伦敦">伦敦</option>
+            <option value="旧金山">旧金山</option>
+            <option value="洛杉矶">洛杉矶</option>
+            <option value="巴拿马">巴拿马</option>
+            <option value="纽奥良">纽奥良</option>
+            <option value="纽约">纽约</option>
+            <option value="里约热内卢">里约热内卢</option>
+            <option value="布宜诺斯艾利斯">布宜诺斯艾利斯</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="input-label"><span>选择年份</span><span style="font-size:9px;color:#7a7872;">1895–2026</span></div>
+          <input type="number" id="user-year" min="1895" max="2026" value="1974">
+        </div>
+
+        <div>
+          <div class="input-label"><span>你的名字 / 称谓</span></div>
+          <input type="text" id="user-author" placeholder="如：台北读者 / 航海后人" maxlength="18">
+        </div>
+
+        <div>
+          <div class="input-label"><span>时空留言 / 记忆</span></div>
+          <textarea id="user-msg" placeholder="写下你的足迹或记忆..." maxlength="100"></textarea>
+        </div>
+
+        <button class="btn-submit-pin" onclick="submitPushPin()">
+          <span>📌</span> 扎入时空大头钉
+        </button>
+      </div>
+
+      <!-- 管理员工具栏 -->
+      <div class="admin-bar">
+        <span>管理留言</span>
+        <button class="admin-toggle" id="admin-toggle-btn" onclick="toggleAdminMode()">开启管理</button>
+      </div>
+
+      <!-- 已存大头钉列表 -->
+      <div class="pin-list-title">
+        <span>已扎入的大头钉</span>
+        <span id="pin-count" style="color:var(--gold);">0</span>
+      </div>
+      <div id="pin-items-container" style="max-height: 110px; overflow-y: auto; scrollbar-width: none;"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       1. 纠偏后的地理坐标矩阵（台湾岛内基隆、台北紧凑相邻）
+       ======================================================== */
+    const CITIES = {
+      "闽侯福州":   { x: -5.5,  z: 8.5  },
+      "上海":       { x: -4.0,  z: -2.0 },
+      "基隆":       { x: 2.2,   z: 4.2  },
+      "台北":       { x: 1.8,   z: 5.2  },
+      "高雄":       { x: 0.5,   z: 9.0  },
+      "香港":       { x: -3.5,  z: 12.0 },
+      "横滨":       { x: 16.0,  z: -8.0 },
+      "神户":       { x: 13.0,  z: -6.0 },
+      "大阪":       { x: 12.0,  z: -6.5 },
+      "釜山":       { x: 8.5,   z: -10.0},
+      "新加坡":     { x: -9.0,  z: 18.0 },
+      "科伦坡":     { x: -16.0, z: 12.0 },
+      "苏伊士":     { x: -22.0, z: -2.0 },
+      "马赛":       { x: -25.0, z: -8.0 },
+      "鹿特丹":     { x: -27.0, z: -14.0},
+      "伦敦":       { x: -29.0, z: -15.0},
+      "旧金山":     { x: 22.0,  z: -14.0},
+      "洛杉矶":     { x: 23.5,  z: -10.0},
+      "巴拿马":     { x: 26.0,  z: 5.0  },
+      "纽奥良":     { x: 28.0,  z: -4.0 },
+      "纽约":       { x: 32.0,  z: -10.0},
+      "里约热内卢": { x: 20.0,  z: 22.0 },
+      "布宜诺斯艾利斯": { x: 18.0, z: 27.0 }
+    };
+
+    /* ========================================================
+       2. 故事主角轨迹：丰富全球大港，非航行期瞬间瞬迁
+       ======================================================== */
+    const TRAJECTORIES = {
+      ancestors_liang: {
+        name: "梁宝泉·赵氏",
+        displayName: "父系先祖",
+        colorHex: "#ffffff",
+        colorThree: 0xffffff,
+        offset: { x: -0.15, z: -0.15 },
+        labelOffset: { x: -4.5, y: 1.8, z: -1.8 },
+        keyframes: [{ year: 1895, city: "闽侯福州" }, { year: 1949, city: "闽侯福州" }]
+      },
+      ancestors_fang: {
+        name: "方梦铿·汪氏",
+        displayName: "母系先祖",
+        colorHex: "#f0d8d8",
+        colorThree: 0xf0d8d8,
+        offset: { x: 0.15, z: 0.15 },
+        labelOffset: { x: 4.5, y: 1.8, z: 1.8 },
+        keyframes: [{ year: 1895, city: "闽侯福州" }, { year: 1949, city: "闽侯福州" }]
+      },
+      houji: {
+        name: "梁厚基",
+        displayName: "梁厚基",
+        colorHex: "#38bdf8",
+        colorThree: 0x38bdf8,
+        offset: { x: 0.2, z: -0.2 },
+        labelOffset: { x: 4.8, y: 1.6, z: -1.5 },
+        disappearYear: 1974,
+        disappearCity: "基隆",
+        keyframes: [
+          { year: 1905, city: "闽侯福州" },
+          { year: 1944.9, city: "闽侯福州" },
+          { year: 1945.0, city: "上海" },
+          { year: 1948.9, city: "上海" },
+          { year: 1949.0, city: "基隆" },
+          { year: 1974.0, city: "基隆" }
+        ]
+      },
+      fangyu: {
+        name: "方玉",
+        displayName: "方玉",
+        colorHex: "#ff5a79",
+        colorThree: 0xff5a79,
+        offset: { x: -0.2, z: 0.2 },
+        labelOffset: { x: -4.8, y: -1.4, z: 1.5 },
+        disappearYear: 1950,
+        disappearCity: "基隆",
+        keyframes: [
+          { year: 1911, city: "闽侯福州" },
+          { year: 1944.9, city: "闽侯福州" },
+          { year: 1945.0, city: "上海" },
+          { year: 1948.9, city: "上海" },
+          { year: 1949.0, city: "基隆" },
+          { year: 1950.0, city: "基隆" }
+        ]
+      },
+      shanjin: {
+        name: "梁善进",
+        displayName: "梁善进",
+        colorHex: "#ffd60a",
+        colorThree: 0ffd60a,
+        offset: { x: 0.0, z: 0.3 },
+        labelOffset: { x: 5.2, y: -1.6, z: 2.2 },
+        disappearYear: 2015,
+        disappearCity: "高雄",
+        keyframes: [
+          { year: 1938, city: "闽侯福州" },
+          { year: 1944.9, city: "闽侯福州" },
+          { year: 1945.0, city: "上海" },
+          { year: 1948.9, city: "上海" },
+          { year: 1949.0, city: "基隆" },
+
+          // 跑船历程（不经上海）
+          { year: 1963.0, city: "基隆" },
+          { year: 1963.6, city: "香港" },
+          { year: 1964.2, city: "新加坡" },
+          { year: 1964.8, city: "神户" },
+          { year: 1965.4, city: "大阪" },
+          { year: 1966.0, city: "基隆" },
+          { year: 1967.2, city: "科伦坡" },
+          { year: 1968.0, city: "苏伊士" },
+          { year: 1968.8, city: "马赛" },
+          { year: 1969.6, city: "鹿特丹" },
+          { year: 1970.4, city: "伦敦" },
+          { year: 1971.2, city: "基隆" },
+          { year: 1972.0, city: "釜山" },
+          { year: 1972.6, city: "横滨" },
+          { year: 1973.2, city: "旧金山" },
+          { year: 1973.8, city: "洛杉矶" },
+          { year: 1974.5, city: "基隆" },
+          { year: 1975.5, city: "新加坡" },
+          { year: 1976.4, city: "里约热内卢" },
+          { year: 1977.2, city: "布宜诺斯艾利斯" },
+          { year: 1978.0, city: "巴拿马" },
+          { year: 1978.8, city: "纽奥良" },
+          { year: 1979.6, city: "基隆" },
+          { year: 1980.8, city: "横滨" },
+          { year: 1981.4, city: "旧金山" },
+          { year: 1982.2, city: "巴拿马" },
+          { year: 1983.0, city: "纽约" },
+          { year: 1983.8, city: "鹿特丹" },
+          { year: 1984.6, city: "新加坡" },
+          { year: 1985.4, city: "基隆" },
+          { year: 1986.6, city: "釜山" },
+          { year: 1987.4, city: "洛杉矶" },
+          { year: 1988.5, city: "基隆" },
+
+          // 上岸定居台北与瞬迁高雄
+          { year: 1995.0, city: "台北" },
+          { year: 2011.9, city: "台北" },
+          { year: 2012.0, city: "高雄" },
+          { year: 2015.0, city: "高雄" }
+        ]
+      },
+      rye: {
+        name: "Rye",
+        displayName: "Rye / 麦子",
+        colorHex: "#30d158",
+        colorThree: 0x30d158,
+        offset: { x: -0.3, z: -0.3 },
+        labelOffset: { x: 4.5, y: 1.0, z: 0 },
+        keyframes: [
+          { year: 1974.0, city: "基隆" },
+          { year: 1994.9, city: "基隆" },
+          { year: 1995.0, city: "台北" },
+          { year: 2004.9, city: "台北" },
+          { year: 2005.0, city: "上海" },
+          { year: 2026.0, city: "上海" }
+        ]
+      }
+    };
+
+    const MIN_YEAR = 1895;
+    const MAX_YEAR = 2026;
+    const CYLINDER_HEIGHT = 46;
+    const BASE_Y = -CYLINDER_HEIGHT / 2;
+
+    function yearToY(year) {
+      return ((year - MIN_YEAR) / (MAX_YEAR - MIN_YEAR) - 0.5) * CYLINDER_HEIGHT;
+    }
+
+    function getCityXZForEntity(cityName, entityKey) {
+      const base = CITIES[cityName] || { x: 0, z: 0 };
+      const item = TRAJECTORIES[entityKey];
+      const sharedCities = ["闽侯福州", "上海", "基隆", "台北", "高雄"];
+      if (sharedCities.includes(cityName) && item && item.offset) {
+        return { x: base.x + item.offset.x, z: base.z + item.offset.z };
+      }
+      return { x: base.x, z: base.z };
+    }
+
+    function getEntityPosAtYear(entityKey, year) {
+      const item = TRAJECTORIES[entityKey];
+      if (!item) return null;
+      const kfs = item.keyframes;
+      if (year < kfs[0].year) return null;
+      if (year > kfs[kfs.length - 1].year) return null;
+
+      for (let i = 0; i < kfs.length - 1; i++) {
+        if (year >= kfs[i].year && year <= kfs[i + 1].year) {
+          if (kfs[i].city === kfs[i+1].city) {
+            const p = getCityXZForEntity(kfs[i].city, entityKey);
+            return { x: p.x, y: yearToY(year), z: p.z, baseX: p.x, baseZ: p.z, currentCity: kfs[i].city };
+          }
+          const t = (year - kfs[i].year) / (kfs[i + 1].year - kfs[i].year);
+          const p1 = getCityXZForEntity(kfs[i].city, entityKey);
+          const p2 = getCityXZForEntity(kfs[i + 1].city, entityKey);
+          return {
+            x: p1.x + (p2.x - p1.x) * t,
+            y: yearToY(year),
+            z: p1.z + (p2.z - p1.z) * t,
+            baseX: p1.x + (p2.x - p1.x) * t,
+            baseZ: p1.z + (p2.z - p1.z) * t,
+            currentCity: t < 0.5 ? kfs[i].city : kfs[i + 1].city
+          };
+        }
+      }
+      return null;
+    }
+
+    /* ========================================================
+       3. 标牌与地图底图纹理生成器
+       ======================================================== */
+    function createNameSprite(name, colorHex) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 380;
+      canvas.height = 96;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "rgba(12, 12, 18, 0.92)";
+      ctx.strokeStyle = colorHex;
+      ctx.lineWidth = 3.5;
+      
+      ctx.beginPath();
+      const r = 18;
+      ctx.moveTo(8 + r, 8);
+      ctx.lineTo(372 - r, 8);
+      ctx.quadraticCurveTo(372, 8, 372, 8 + r);
+      ctx.lineTo(372, 88 - r);
+      ctx.quadraticCurveTo(372, 88, 372, 92);
+      ctx.lineTo(8 + r, 92);
+      ctx.quadraticCurveTo(8, 92, 8, 88 - r);
+      ctx.lineTo(8, 8 + r);
+      ctx.quadraticCurveTo(8, 8, 8 + r, 8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = colorHex;
+      ctx.beginPath();
+      ctx.arc(42, 48, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.font = "bold 34px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(name, 70, 49);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
+      const sprite = new THREE.Sprite(spriteMat);
+      sprite.scale.set(8.5, 2.1, 1);
+      return sprite;
+    }
+
+    /* ========================================================
+       4. Three.js 场景初始化
+       ======================================================== */
+    const container = document.getElementById("webgl-container");
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+    scene.fog = new THREE.FogExp2(0x000000, 0.0075);
+
+    const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(55, 42, 70);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxDistance = 200;
+    controls.minDistance = 15;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    dirLight.position.set(30, 60, 30);
+    scene.add(dirLight);
+
+    /* 动态渲染带有城市名称的底盘地图纹理 */
+    function createDarkMapTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 2048;
+      canvas.height = 2048;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#101016";
+      ctx.fillRect(0, 0, 2048, 2048);
+
+      ctx.strokeStyle = "#1d1d28";
+      ctx.lineWidth = 1.5;
+      for (let i = 80; i < 2048; i += 120) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 2048); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(2048, i); ctx.stroke();
+      }
+
+      Object.keys(CITIES).forEach(cityName => {
+        const c = CITIES[cityName];
+        const px = 1024 + c.x * 22;
+        const py = 1024 + c.z * 22;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 4.0, 0, Math.PI * 2);
+        ctx.fillStyle = "#e64539";
+        ctx.fill();
+
+        ctx.font = "bold 21px sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "left";
+        ctx.fillText(cityName, px + 10, py + 7);
+      });
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    const mapGeo = new THREE.PlaneGeometry(100, 100);
+    const mapMat = new THREE.MeshBasicMaterial({ map: createDarkMapTexture(), side: THREE.DoubleSide });
+    const mapMesh = new THREE.Mesh(mapGeo, mapMat);
+    mapMesh.rotation.x = -Math.PI / 2;
+    mapMesh.position.y = BASE_Y;
+    scene.add(mapMesh);
+
+    Object.keys(CITIES).forEach(cityName => {
+      const pos = CITIES[cityName];
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(pos.x, BASE_Y, pos.z),
+        new THREE.Vector3(pos.x, -BASE_Y, pos.z)
+      ]);
+      const lineMat = new THREE.LineDashedMaterial({ color: 0x333344, dashSize: 1.2, gapSize: 2.0 });
+      const cityLine = new THREE.Line(lineGeo, lineMat);
+      cityLine.computeLineDistances();
+      scene.add(cityLine);
+    });
+
+    const ringRadius = 40;
+    const ringYears = [1895, 1911, 1938, 1945, 1949, 1950, 1963, 1973, 1974, 1995, 2005, 2012, 2015, 2026];
+    ringYears.forEach(yr => {
+      const y = yearToY(yr);
+      const ringGeo = new THREE.BufferGeometry();
+      const pts = [];
+      for (let a = 0; a <= Math.PI * 2 + 0.1; a += 0.15) {
+        pts.push(new THREE.Vector3(Math.cos(a) * ringRadius, y, Math.sin(a) * ringRadius));
+      }
+      ringGeo.setFromPoints(pts);
+      const ringMat = new THREE.LineBasicMaterial({ color: 0x222230, transparent: true, opacity: 0.6 });
+      scene.add(new THREE.Line(ringGeo, ringMat));
+    });
+
+    const dynamicTrailLines = {};
+    Object.keys(TRAJECTORIES).forEach(key => {
+      const trailGeo = new THREE.BufferGeometry();
+      const trailMat = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        linewidth: 2.8,
+        transparent: true,
+        opacity: 0.95
+      });
+      const trailLine = new THREE.Line(trailGeo, trailMat);
+      scene.add(trailLine);
+      dynamicTrailLines[key] = trailLine;
+    });
+
+    const sliceGeo = new THREE.CylinderGeometry(ringRadius + 0.5, ringRadius + 0.5, 0.2, 48);
+    const sliceMat = new THREE.MeshBasicMaterial({ color: 0xe64539, transparent: true, opacity: 0.08, side: THREE.DoubleSide });
+    const sliceMesh = new THREE.Mesh(sliceGeo, sliceMat);
+    scene.add(sliceMesh);
+
+    const particleSpheres = {};
+    const nameSprites = {};
+    const leaderLines = {};
+    const groundShadowRings = {};
+    const verticalDropLines = {};
+
+    Object.keys(TRAJECTORIES).forEach(key => {
+      const item = TRAJECTORIES[key];
+
+      const sphGeo = new THREE.SphereGeometry(0.38, 16, 16);
+      const sphMat = new THREE.MeshBasicMaterial({ color: item.colorThree });
+      const sph = new THREE.Mesh(sphGeo, sphMat);
+      scene.add(sph);
+      particleSpheres[key] = sph;
+
+      const sprite = createNameSprite(item.displayName, item.colorHex);
+      scene.add(sprite);
+      nameSprites[key] = sprite;
+
+      const leaderGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+      const leaderMat = new THREE.LineBasicMaterial({ color: item.colorThree, transparent: true, opacity: 0.7 });
+      const leaderLine = new THREE.Line(leaderGeo, leaderMat);
+      scene.add(leaderLine);
+      leaderLines[key] = leaderLine;
+
+      const ringGeo = new THREE.RingGeometry(0.05, 0.15, 16);
+      const ringMat = new THREE.MeshBasicMaterial({ color: item.colorThree, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
+      const shadowRing = new THREE.Mesh(ringGeo, ringMat);
+      shadowRing.rotation.x = -Math.PI / 2;
+      shadowRing.position.y = BASE_Y + 0.05;
+      scene.add(shadowRing);
+      groundShadowRings[key] = shadowRing;
+
+      const dropLineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, BASE_Y, 0), new THREE.Vector3(0, 0, 0)]);
+      const dropLineMat = new THREE.LineBasicMaterial({ color: item.colorThree, transparent: true, opacity: 0.35 });
+      const dropLine = new THREE.Line(dropLineGeo, dropLineMat);
+      scene.add(dropLine);
+      verticalDropLines[key] = dropLine;
+    });
+
+    /* ========================================================
+       5. 琥珀金小号大头钉系统
+       ======================================================== */
+    const DEFAULT_PINS = [{ id: "p1", city: "基隆", year: 1949, author: "老兵后代", msg: "在此扎根，岁月回响。" }];
+    let userPinsList = JSON.parse(localStorage.getItem('rye_spacetime_pushpins_v24')) || DEFAULT_PINS;
+    const pinObjectsGroup = new THREE.Group();
+    scene.add(pinObjectsGroup);
+
+    let isAdminMode = false;
+    function toggleAdminMode() {
+      isAdminMode = !isAdminMode;
+      const btn = document.getElementById("admin-toggle-btn");
+      btn.innerText = isAdminMode ? "退出管理" : "开启管理";
+      btn.classList.toggle("active", isAdminMode);
+      renderAllPushPins();
+    }
+
+    function createPushPinMesh(pinData) {
+      const group = new THREE.Group();
+      const cityPos = CITIES[pinData.city] || { x: 0, z: 0 };
+      const y = yearToY(pinData.year);
+      const pinLocalGroup = new THREE.Group();
+
+      const pinMat = new THREE.MeshStandardMaterial({
+        color: 0xd4a373,
+        emissive: 0x5a3d1e,
+        emissiveIntensity: 0.4,
+        roughness: 0.3
+      });
+
+      const capGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.09, 16);
+      const capMesh = new THREE.Mesh(capGeo, pinMat);
+      capMesh.position.set(0, 0.28, 0);
+      pinLocalGroup.add(capMesh);
+
+      const needleGeo = new THREE.ConeGeometry(0.035, 0.3, 8);
+      const needleMat = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+      const needleMesh = new THREE.Mesh(needleGeo, needleMat);
+      needleMesh.rotation.x = Math.PI;
+      needleMesh.position.set(0, -0.12, 0);
+      pinLocalGroup.add(needleMesh);
+
+      pinLocalGroup.position.set(cityPos.x, y, cityPos.z);
+      pinLocalGroup.userData = pinData;
+      capMesh.userData = pinData;
+
+      group.add(pinLocalGroup);
+      return group;
+    }
+
+    function renderAllPushPins() {
+      while(pinObjectsGroup.children.length > 0) {
+        pinObjectsGroup.remove(pinObjectsGroup.children[0]);
+      }
+      userPinsList.forEach(pin => {
+        pinObjectsGroup.add(createPushPinMesh(pin));
+      });
+
+      const container = document.getElementById("pin-items-container");
+      document.getElementById("pin-count").innerText = userPinsList.length;
+      container.innerHTML = "";
+
+      userPinsList.slice().reverse().forEach(pin => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "pin-item" + (isAdminMode ? " admin-mode" : "");
+        itemDiv.onclick = (e) => {
+          if (!e.target.classList.contains('btn-delete-pin')) focusOnPushPin(pin);
+        };
+        itemDiv.innerHTML = `
+          <button class="btn-delete-pin" onclick="deletePin('${pin.id}')">删</button>
+          <div class="pin-item-head"><span>📍 ${pin.city} · ${pin.year}年</span><span style="color:#a4a096;font-size:9.5px;">${pin.author}</span></div>
+          <div class="pin-item-body">${pin.msg}</div>
+        `;
+        container.appendChild(itemDiv);
+      });
+    }
+
+    function deletePin(id) {
+      userPinsList = userPinsList.filter(p => p.id !== id);
+      localStorage.setItem('rye_spacetime_pushpins_v24', JSON.stringify(userPinsList));
+      renderAllPushPins();
+      pinTooltip.style.display = "none";
+    }
+
+    function focusOnPushPin(pin) {
+      updateSpacetime(parseFloat(pin.year));
+      const c = CITIES[pin.city] || { x: 0, z: 0 };
+      controls.target.set(c.x, yearToY(pin.year), c.z);
+    }
+
+    function submitPushPin() {
+      const city = document.getElementById("user-city").value;
+      const year = parseFloat(document.getElementById("user-year").value);
+      const author = document.getElementById("user-author").value.trim() || "时空访客";
+      const msg = document.getElementById("user-msg").value.trim();
+
+      if (!msg) { alert("请写下一句留言。"); return; }
+      if (year > 2026 || year < 1895) { alert("年份须在 1895 至 2026 之间。"); return; }
+
+      userPinsList.push({ id: "pin_" + Date.now(), city, year, author, msg });
+      localStorage.setItem('rye_spacetime_pushpins_v24', JSON.stringify(userPinsList));
+      document.getElementById("user-msg").value = "";
+      renderAllPushPins();
+    }
+
+    /* ========================================================
+       6. 射线检测与事件驱动
+       ======================================================== */
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const pinTooltip = document.getElementById("pin-tooltip-card");
+
+    window.addEventListener("pointerdown", (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(pinObjectsGroup.children, true);
+
+      if (intersects.length > 0) {
+        let hit = null;
+        intersects.forEach(i => {
+          let curr = i.object;
+          while(curr) {
+            if (curr.userData && curr.userData.city) { hit = curr.userData; break; }
+            curr = curr.parent;
+          }
+        });
+        if (hit) {
+          pinTooltip.style.display = "block";
+          pinTooltip.style.left = Math.min(window.innerWidth - 270, event.clientX + 14) + "px";
+          pinTooltip.style.top = Math.max(20, event.clientY - 30) + "px";
+          pinTooltip.innerHTML = `
+            <div style="font-weight:750;color:var(--gold);margin-bottom:3px;display:flex;justify-content:space-between;"><span>📌 读者时空留名</span><span style="font-size:10px;">${hit.year}年</span></div>
+            <div><strong>地点：</strong>${hit.city}</div>
+            <div><strong>留名人：</strong>${hit.author}</div>
+            <div style="margin:4px 0;padding:4px 0;border-top:1px dashed #333;color:#f0f0f0;">“${hit.msg}”</div>
+          `;
+          focusOnPushPin(hit);
+          setTimeout(() => { pinTooltip.style.display = "none"; }, 6000);
+        }
+      } else {
+        pinTooltip.style.display = "none";
+      }
+    });
+
+    const slider = document.getElementById("year-slider");
+    const yearDisplay = document.getElementById("year-val");
+    let isPlaying = true;
+    let playInterval = null;
+
+    function updateSpacetime(year) {
+      yearDisplay.innerText = Math.round(year);
+      slider.value = year;
+      sliceMesh.position.y = yearToY(year);
+
+      Object.keys(TRAJECTORIES).forEach(key => {
+        const item = TRAJECTORIES[key];
+        const pos = getEntityPosAtYear(key, year);
+        const sph = particleSpheres[key];
+        const sprite = nameSprites[key];
+        const leader = leaderLines[key];
+        const shadow = groundShadowRings[key];
+        const dropLine = verticalDropLines[key];
+        const trailLine = dynamicTrailLines[key];
+
+        const historyPoints = [];
+        const historyColors = [];
+        const startYear = item.keyframes[0].year;
+        const endYear = Math.min(year, item.disappearYear || 2026);
+
+        if (year >= startYear) {
+          const baseColor = new THREE.Color(item.colorHex);
+          const darkFadeColor = new THREE.Color("#101018");
+
+          for (let y = startYear; y <= endYear; y += 0.12) {
+            const p = getEntityPosAtYear(key, y);
+            if (p) {
+              historyPoints.push(new THREE.Vector3(p.x, p.y, p.z));
+              const age = Math.max(0, year - y);
+              const tFade = Math.min(1.0, age / 35.0);
+              const c = baseColor.clone().lerp(darkFadeColor, tFade * 0.85);
+              historyColors.push(c.r, c.g, c.b);
+            }
+          }
+        }
+
+        if (historyPoints.length >= 2) {
+          trailLine.visible = true;
+          trailLine.geometry.setFromPoints(historyPoints);
+          trailLine.geometry.setAttribute('color', new THREE.Float32BufferAttribute(historyColors, 3));
+        } else {
+          trailLine.visible = false;
+        }
+
+        let isVisible = false;
+        let pulseFactor = 1.0;
+        let isFlashing = false;
+
+        if (year >= startYear) {
+          if (!item.disappearYear || year < item.disappearYear) {
+            isVisible = true;
+            isFlashing = false;
+            pulseFactor = 1.0;
+          } else if (item.disappearYear) {
+            const delta = year - item.disappearYear;
+            const flashDuration = 2.5;
+            if (delta <= flashDuration) {
+              isVisible = true;
+              isFlashing = true;
+              const wave = Math.abs(Math.sin(delta * 10.0));
+              const fade = 1.0 - (delta / flashDuration);
+              pulseFactor = 0.2 + wave * 0.8 * fade;
+            } else {
+              isVisible = false;
+            }
+          }
+        }
+
+        if (isVisible && pos) {
+          sph.visible = true;
+          sprite.visible = true;
+          leader.visible = true;
+          shadow.visible = true;
+          dropLine.visible = true;
+
+          if (isFlashing) {
+            sph.scale.setScalar(1.0 + pulseFactor * 2.8);
+            sph.material.opacity = pulseFactor;
+            sprite.scale.set(8.5 * (1.0 + pulseFactor * 0.4), 2.1 * (1.0 + pulseFactor * 0.4), 1);
+            sprite.material.opacity = pulseFactor;
+            leader.material.opacity = pulseFactor * 0.8;
+            shadow.material.opacity = pulseFactor * 0.9;
+          } else {
+            sph.scale.setScalar(1.0);
+            sph.material.opacity = 1.0;
+            sprite.scale.set(8.5, 2.1, 1);
+            sprite.material.opacity = 1.0;
+            leader.material.opacity = 0.7;
+            shadow.material.opacity = 0.85;
+          }
+
+          sph.position.set(pos.x, pos.y, pos.z);
+
+          const targetSpritePos = new THREE.Vector3(
+            pos.x + item.labelOffset.x,
+            pos.y + item.labelOffset.y,
+            pos.z + item.labelOffset.z
+          );
+          sprite.position.copy(targetSpritePos);
+
+          leader.geometry.setFromPoints([
+            new THREE.Vector3(pos.x, pos.y, pos.z),
+            targetSpritePos
+          ]);
+
+          shadow.position.set(pos.baseX, BASE_Y + 0.05, pos.baseZ);
+          dropLine.geometry.setFromPoints([
+            new THREE.Vector3(pos.x, BASE_Y, pos.z),
+            new THREE.Vector3(pos.x, pos.y, pos.z)
+          ]);
+        } else {
+          sph.visible = false;
+          sprite.visible = false;
+          leader.visible = false;
+          shadow.visible = false;
+          dropLine.visible = false;
+        }
+      });
+    }
+
+    slider.addEventListener("input", (e) => {
+      updateSpacetime(parseFloat(e.target.value));
+    });
+
+    function startLoopPlay() {
+      if (playInterval) clearInterval(playInterval);
+      playInterval = setInterval(() => {
+        let y = parseFloat(slider.value) + 0.09;
+        if (y > MAX_YEAR) y = MIN_YEAR;
+        updateSpacetime(y);
+      }, 45);
+    }
+
+    function togglePlay() {
+      const btn = document.getElementById("btn-play");
+      if (isPlaying) {
+        clearInterval(playInterval);
+        isPlaying = false;
+        btn.innerText = "继续播放 ▶";
+      } else {
+        isPlaying = true;
+        btn.innerText = "暂停播放 ❚❚";
+        startLoopPlay();
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    updateSpacetime(1895);
+    renderAllPushPins();
+    startLoopPlay();
+    animate();
+  </script>
+</body>
+</html>

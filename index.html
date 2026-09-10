@@ -47,7 +47,7 @@
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                    "PingFang SC", "Microsoft YaHei", sans-serif;
-      line-height: 1.8;
+      line-height: 1.75;
     }
 
     a {
@@ -63,85 +63,88 @@
     .page {
       width: min(920px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 36px 0 80px;
+      padding: 30px 0 60px;
     }
 
     nav {
       display: flex;
       flex-wrap: wrap;
       gap: 10px 22px;
-      padding-bottom: 24px;
+      padding-bottom: 18px;
       border-bottom: 1px solid var(--line);
       font-size: 14px;
     }
 
     .hero {
-      padding: 76px 0 54px;
-    }
-
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+      padding: 44px 0 32px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(38px, 7vw, 68px);
+      font-size: clamp(36px, 6.5vw, 62px);
       font-weight: 650;
       letter-spacing: -0.035em;
       line-height: 1.15;
     }
 
     .name-en {
-      margin: 8px 0 34px;
+      margin: 4px 0 10px;
       color: var(--muted);
-      font-size: clamp(19px, 3vw, 25px);
+      font-size: clamp(18px, 2.8vw, 24px);
+    }
+
+    .eyebrow {
+      margin: 0 0 22px;
+      color: var(--accent);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
     }
 
     .lead {
       max-width: 780px;
       margin: 0;
-      padding: 26px 0;
+      padding: 20px 0;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
-      font-size: clamp(18px, 2.5vw, 22px);
+      font-size: clamp(17px, 2.3vw, 20.5px);
+      line-height: 1.8;
     }
 
     .lead-en {
       max-width: 780px;
-      margin: 22px 0 0;
+      margin: 16px 0 0;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
     section {
-      margin-top: 64px;
+      margin-top: 48px;
     }
 
     h2 {
-      margin: 0 0 22px;
-      font-size: 25px;
+      margin: 0 0 16px;
+      font-size: 23px;
       line-height: 1.35;
     }
 
     h3 {
       margin: 0 0 8px;
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .section-intro {
       max-width: 760px;
-      margin: -8px 0 24px;
+      margin: -6px 0 20px;
       color: var(--muted);
+      font-size: 15px;
     }
 
     .practice-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
 
     .practice-card,
@@ -152,7 +155,7 @@
     }
 
     .practice-card {
-      padding: 24px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -161,20 +164,17 @@
     .practice-card p {
       margin: 0;
       color: var(--muted);
+      font-size: 14.5px;
     }
 
     .card-link {
-      margin-top: 16px !important;
-      font-size: 14px;
+      margin-top: 14px !important;
+      font-size: 13.5px;
       font-weight: 600;
     }
 
     .card-link a {
       color: var(--accent);
-    }
-
-    .card-link a:hover {
-      text-decoration: underline;
     }
 
     .early-practice {
@@ -191,73 +191,82 @@
 
     .timeline li {
       display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 24px;
-      padding: 22px 0;
+      grid-template-columns: 110px 1fr;
+      gap: 20px;
+      padding: 16px 0;
       border-bottom: 1px solid var(--line);
     }
 
     .timeline time {
       color: var(--accent);
       font-weight: 700;
+      font-size: 14.5px;
     }
 
     .timeline p {
       margin: 0;
+      font-size: 15px;
+    }
+
+    /* 合并后的档案与文献网格 */
+    .archive-unified-grid {
+      display: grid;
+      gap: 14px;
     }
 
     .archive-card {
-      padding: 28px;
+      padding: 22px 24px;
       border-left: 4px solid var(--accent);
     }
 
     .archive-code {
-      margin: 0 0 8px;
+      margin: 0 0 6px;
       color: var(--accent);
       font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
     }
 
     .archive-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px 22px;
-      margin-top: 18px;
+      gap: 8px 18px;
+      margin-top: 14px;
+      font-size: 14px;
     }
 
-    /* 媒体报道精选卡片 */
     .press-grid {
       display: grid;
-      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
 
     .press-card {
-      padding: 22px 24px;
+      padding: 18px 20px;
     }
 
     .press-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .press-card h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
+      margin: 0 0 8px;
+      font-size: 16.5px;
       line-height: 1.4;
     }
 
     .press-quote {
-      margin: 0 0 14px;
+      margin: 0 0 12px;
       color: var(--muted);
-      font-size: 14.5px;
-      line-height: 1.7;
-      padding-left: 12px;
+      font-size: 13.5px;
+      line-height: 1.65;
+      padding-left: 10px;
       border-left: 2px solid var(--line);
     }
 
@@ -267,39 +276,40 @@
     }
 
     .press-tag {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--muted);
       background: var(--paper);
-      padding: 2px 8px;
+      padding: 2px 6px;
       border-radius: 2px;
     }
 
     .press-more {
-      margin-top: 20px;
+      margin-top: 16px;
       text-align: right;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
     }
 
     footer {
-      margin-top: 76px;
-      padding-top: 24px;
+      margin-top: 56px;
+      padding-top: 20px;
       border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13.5px;
     }
 
     @media (max-width: 680px) {
       .page {
         width: min(100% - 32px, 920px);
-        padding-top: 24px;
+        padding-top: 20px;
       }
 
       .hero {
-        padding: 52px 0 36px;
+        padding: 36px 0 24px;
       }
 
-      .practice-grid {
+      .practice-grid,
+      .press-grid {
         grid-template-columns: 1fr;
       }
 
@@ -392,6 +402,49 @@
             "@type": "Article",
             "name": "魅力上海｜梁忠：千折百转的遇见",
             "url": "https://m.cyol.com/gb/articles/2023-01/09/content_KaaZByTBAV.html"
+          },
+          {
+            "@type": "Article",
+            "name": "上海市长宁区人民政府：长宁区青年中心相关报道",
+            "url": "https://www.shcn.gov.cn/col7343/20221109/1225345.html"
+          },
+          {
+            "@type": "Article",
+            "name": "中国作家网：网文作家联手书写陕西北路，书写上海",
+            "url": "https://www.chinawriter.com.cn/n1/2021/0909/c404023-32222619.html"
+          }
+        ]
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": "https://ryechung.github.io/rye/sketching-shanghai.html#project",
+        "name": "速写上海",
+        "alternateName": "Sketching Shanghai",
+        "description": "由艺术家麦子（Rye Liang）于2017年6月在上海创办的开放式市民艺术与城市记录实践。",
+        "creator": {
+          "@id": "https://ryechung.github.io/rye/#rye-liang"
+        },
+        "dateCreated": "2017-06",
+        "locationCreated": {
+          "@type": "Place",
+          "name": "上海"
+        },
+        "url": "https://ryechung.github.io/rye/sketching-shanghai.html",
+        "sameAs": [
+          "https://www.wikidata.org/wiki/Q141365039",
+          "https://doi.org/10.5281/zenodo.22116389"
+        ],
+        "subjectOf": [
+          {
+            "@type": "WebPage",
+            "name": "速写上海：2017年6月早期活动与原始记录",
+            "url": "https://ryechung.github.io/rye/history-2017.html"
+          },
+          {
+            "@type": "CreativeWork",
+            "name": "A-2017-SH-001",
+            "identifier": "10.5281/zenodo.22116389",
+            "url": "https://doi.org/10.5281/zenodo.22116389"
           }
         ]
       }
@@ -406,15 +459,14 @@
       <a href="#about">关于</a>
       <a href="#practice">实践领域</a>
       <a href="#path">实践路径</a>
-      <a href="#archive">档案</a>
-      <a href="#sources">公开资料</a>
+      <a href="#archive">档案与文献</a>
       <a href="en/sketching-shanghai-2017.html" lang="en">English</a>
     </nav>
 
     <header class="hero" id="about">
-      <p class="eyebrow">ARTIST · CIVIC PRACTICE · ARCHIVE</p>
       <h1>麦子</h1>
       <p class="name-en">Rye Liang</p>
+      <p class="eyebrow">ARTIST · CIVIC PRACTICE · ARCHIVE</p>
 
       <p class="lead">
         麦子（Rye Liang）是一位以城市生活和公共参与为基础开展工作的创作者。其长期实践涉及市民艺术、社区营造、人体科学与艺术、台北—上海双城故事及档案小说。“速写上海”是其自2017年展开的早期实践之一，现场绘画后来成为更广泛公共文化工作的组成部分。
@@ -459,7 +511,7 @@
           <p class="card-link"><a href="dual-city.html">点击了解 →</a></p>
         </article>
 
-        <!-- 4. 档案小说（直通独立小说阅读页） -->
+        <!-- 4. 档案小说 -->
         <article class="practice-card">
           <div>
             <h3><a href="archival-fiction.html">档案小说</a></h3>
@@ -474,7 +526,7 @@
             <h3><a href="sketching-shanghai.html">速写上海</a></h3>
             <p>2017年由麦子（Rye Liang）在上海创办的开放式市民艺术与城市记录实践。</p>
           </div>
-          <p style="margin-top: 14px;">
+          <p style="margin-top: 12px;">
             <a href="sketching-shanghai.html">查看“速写上海”专题档案 →</a>
           </p>
         </article>
@@ -499,67 +551,68 @@
       </ol>
     </section>
 
+    <!-- 合并后的档案存证与公开文献板块 -->
     <section id="archive">
-      <h2>早期档案</h2>
-
-      <article class="archive-card">
-        <p class="archive-code">A-2017-SH-001</p>
-        <h3>速写上海：2017年6月早期活动与原始记录</h3>
-        <p>
-          该档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称和人物信息。固定版本通过Zenodo公开保存。
-        </p>
-
-        <div class="archive-links">
-          <a href="history-2017.html">查看2017年历史页 →</a>
-          <a href="en/sketching-shanghai-2017.html" lang="en">English chronology →</a>
-          <a href="https://doi.org/10.5281/zenodo.22116389" target="_blank" rel="noopener">DOI 10.5281/zenodo.22116389 →</a>
-          <a href="https://zenodo.org/records/22116389" target="_blank" rel="noopener">查看Zenodo原始文件 →</a>
-        </div>
-      </article>
-    </section>
-
-    <section id="sources">
-      <h2>公开资料与媒体回响</h2>
+      <h2>档案存证与文献回响</h2>
       <p class="section-intro">
-        媒体特写与公开文献从第三方视角记录了从街头速写、社区营造到市民艺术的演进脉络。
+        原始档案与第三方公开文献共同确立了从现场绘画、社区营造到市民艺术的演进脉络与事实依据。
       </p>
 
-      <div class="press-grid">
-        <article class="press-card">
-          <div class="press-meta">
-            <span class="press-source">新民晚报</span>
-            <time datetime="2024-05-15">2024.05.15</time>
-          </div>
-          <h3>
-            <a href="https://paper.xinmin.cn/html/home/2024-05-15/01/22024.html" target="_blank" rel="noopener">
-              《梁忠：从城市速写者到市民艺术家》
-            </a>
-          </h3>
-          <p class="press-quote">
-            “从最初在街头现场的即兴勾勒，逐步走向与社区居民共同生长的市民艺术实践，让艺术真正进入城市日常生活。”
+      <div class="archive-unified-grid">
+        <!-- 早期档案卡片 -->
+        <article class="archive-card">
+          <p class="archive-code">A-2017-SH-001</p>
+          <h3>速写上海：2017年6月早期活动与原始记录</h3>
+          <p>
+            该档案保存2017年6月的同期手绘作品、活动页面及可辨认的日期、名称和人物信息。固定版本通过Zenodo公开保存。
           </p>
-          <div class="press-footer">
-            <span class="press-tag">实践范式转变 · 市民艺术</span>
+
+          <div class="archive-links">
+            <a href="history-2017.html">查看2017年历史页 →</a>
+            <a href="en/sketching-shanghai-2017.html" lang="en">English chronology →</a>
+            <a href="https://doi.org/10.5281/zenodo.22116389" target="_blank" rel="noopener">DOI 10.5281/zenodo.22116389 →</a>
+            <a href="https://zenodo.org/records/22116389" target="_blank" rel="noopener">查看Zenodo原始文件 →</a>
           </div>
         </article>
 
-        <article class="press-card">
-          <div class="press-meta">
-            <span class="press-source">中央通讯社</span>
-            <time datetime="2024-05-24">2024.05.24</time>
-          </div>
-          <h3>
-            <a href="https://www.cna.com.tw/news/acn/202405240065.aspx" target="_blank" rel="noopener">
-              《台湾人上海推动社区营造 贴近日常不打高空》
-            </a>
-          </h3>
-          <p class="press-quote">
-            “深入基层社区的日常肌理，以低门槛、重感知的公众参与方式，探索艺术如何成为社区连接的催化剂。”
-          </p>
-          <div class="press-footer">
-            <span class="press-tag">社区营造 · 在地行动</span>
-          </div>
-        </article>
+        <!-- 媒体报道精选卡片（双列排版） -->
+        <div class="press-grid">
+          <article class="press-card">
+            <div class="press-meta">
+              <span class="press-source">新民晚报</span>
+              <time datetime="2024-05-15">2024.05.15</time>
+            </div>
+            <h3>
+              <a href="https://paper.xinmin.cn/html/home/2024-05-15/01/22024.html" target="_blank" rel="noopener">
+                《梁忠：从城市速写者到市民艺术家》
+              </a>
+            </h3>
+            <p class="press-quote">
+              “从最初在街头现场的即兴勾勒，逐步走向与社区居民共同生长的市民艺术实践，让艺术真正进入城市日常生活。”
+            </p>
+            <div class="press-footer">
+              <span class="press-tag">实践范式转变 · 市民艺术</span>
+            </div>
+          </article>
+
+          <article class="press-card">
+            <div class="press-meta">
+              <span class="press-source">中央通讯社</span>
+              <time datetime="2024-05-24">2024.05.24</time>
+            </div>
+            <h3>
+              <a href="https://www.cna.com.tw/news/acn/202405240065.aspx" target="_blank" rel="noopener">
+                《台湾人上海推动社区营造 贴近日常不打高空》
+              </a>
+            </h3>
+            <p class="press-quote">
+              “深入基层社区的日常肌理，以低门槛、重感知的公众参与方式，探索艺术如何成为社区连接的催化剂。”
+            </p>
+            <div class="press-footer">
+              <span class="press-tag">社区营造 · 在地行动</span>
+            </div>
+          </article>
+        </div>
       </div>
 
       <div class="press-more">

@@ -12,6 +12,7 @@
 
   <link rel="canonical" href="https://ryechung.github.io/rye/">
   <link rel="alternate" hreflang="zh-CN" href="https://ryechung.github.io/rye/">
+  <link rel="alternate" hreflang="en" href="https://ryechung.github.io/rye/en/sketching-shanghai-2017.html">
   <link rel="alternate" hreflang="x-default" href="https://ryechung.github.io/rye/">
 
   <meta property="og:title" content="麦子／Rye Liang｜市民艺术、社区营造与档案实践">
@@ -63,7 +64,31 @@
     .page {
       width: min(920px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 36px 0 60px;
+      padding: 24px 0 60px;
+    }
+
+    /* 顶部极简语言切换 */
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .lang-link {
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 3px 10px;
+      border-radius: 2px;
+      background: var(--card);
+      font-weight: 500;
+    }
+
+    .lang-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      text-decoration: none;
     }
 
     /* 紧凑版 Hero 区域 */
@@ -299,12 +324,16 @@
       border-top: 1px solid var(--line);
       color: var(--muted);
       font-size: 13.5px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     @media (max-width: 680px) {
       .page {
         width: min(100% - 32px, 920px);
-        padding-top: 24px;
+        padding-top: 20px;
       }
 
       .practice-grid,
@@ -460,6 +489,11 @@
 
 <body>
   <main class="page">
+    <!-- 顶部右上角极简语言切换 -->
+    <div class="top-bar">
+      <a href="en/sketching-shanghai-2017.html" class="lang-link" lang="en">English / Chronology →</a>
+    </div>
+
     <header class="hero" id="about">
       <h1>麦子</h1>
       <p class="name-en">Rye Liang</p>
@@ -473,7 +507,7 @@
           Rye Liang is an artist whose practice grows from urban life and public participation. His work encompasses civic art, community engagement, human science and art, dual-city stories, and archive fiction. Sketching Shanghai, begun in 2017, was one early strand of this wider practice.
         </p>
 
-        <!-- 整合进导语框的实践演进脉络 -->
+        <!-- 嵌入导语框底部的实践演进脉络 -->
         <div class="lead-path">
           <div class="path-row">
             <span class="path-tag">2017年6月</span>
@@ -574,7 +608,7 @@
 
         <!-- 权威收录与媒体精选网格 -->
         <div class="press-grid">
-          <!-- 百度百科权威词条（已更新为唯一专属 ID） -->
+          <!-- 百度百科权威词条 -->
           <article class="press-card highlight">
             <div class="press-meta">
               <span class="press-source">百度百科 · 权威收录</span>
@@ -620,8 +654,10 @@
     </section>
 
     <footer>
-      麦子（梁忠／Rye Liang）个人实践与档案主页<br>
-      页面更新：2026年9月10日
+      <div>麦子（梁忠／Rye Liang）个人实践与档案主页</div>
+      <div>
+        <a href="en/sketching-shanghai-2017.html" lang="en">English Version</a> · 页面更新：2026年9月10日
+      </div>
     </footer>
   </main>
 </body>

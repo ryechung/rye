@@ -211,7 +211,9 @@
     <!-- 篇目选择导航区 -->
     <div class="chapter-nav">
       <span class="chapter-label">篇目索引：</span>
-      <div id="btn-group" style="display: inline-flex; gap: 10px; flex-wrap: wrap;"></div>
+      <div id="btn-group" style="display: inline-flex; gap: 10px; flex-wrap: wrap;">
+        <span style="color: var(--muted); font-size: 14px;">正在载入篇目清单...</span>
+      </div>
     </div>
 
     <!-- 正文渲染阅读区 -->
@@ -242,37 +244,43 @@
   </main>
 
   <script>
-    // 章节文件清单（以后新增篇目只需在此追加一行）
-    const CHAPTERS = [
-      {
-        id: 1,
-        title: "第 001 篇：奥运前的东京街头",
-        fileName: "档案小说 001 青年梁善进的奇妙冒险--奥运前的东京街头.md"
-      },
-      {
-        id: 2,
-        title: "第 002 篇：巴拿马的太阳",
-        fileName: "档案小说 002 青年梁善进的奇妙冒险--巴拿马的太阳.md"
-      }
-    ];
-
+    const MANIFEST_URL = "https://raw.githubusercontent.com/ryechung/archival-fiction/main/chapters.json";
     const RAW_BASE_URL = "https://raw.githubusercontent.com/ryechung/archival-fiction/main/";
 
-    // 渲染篇目按钮
-    function initButtons() {
-      const btnGroup = document.getElementById('btn-group');
-      btnGroup.innerHTML = '';
+    // 1. 动态拉取由 Action 自动生成的 chapters.json 清单
+    fetch(MANIFEST_URL)
+      .then(res => {
+        if (!res.ok) throw new Error("无法获取清单（HTTP " + res.status + "）");
+        return res.json();
+      })
+      .then(chapters => {
+        const btnGroup = document.getElementById('btn-group');
+        btnGroup.innerHTML = '';
 
-      CHAPTERS.forEach((chap, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
-        btn.innerText = chap.title;
-        btn.onclick = () => loadChapter(chap, btn);
-        btnGroup.appendChild(btn);
+        if (!chapters || chapters.length === 0) {
+          btnGroup.innerHTML = '<span style="color: var(--muted);">暂无已归档篇目</span>';
+          return;
+        }
+
+        chapters.forEach((chap, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'chapter-btn' + (idx === 0 ? ' active' : '');
+          btn.innerText = chap.title;
+          btn.onclick = () => loadChapter(chap, btn);
+          btnGroup.appendChild(btn);
+        });
+
+        // 默认载入首篇
+        loadChapter(chapters[0], btnGroup.children[0]);
+      })
+      .catch(err => {
+        document.getElementById('btn-group').innerHTML = `
+          <span style="color: var(--accent); font-size: 14px;">
+            自动索引加载中（${err.message}）。若刚推送请稍候 1 分钟。
+          </span>`;
       });
-    }
 
-    // 抓取并渲染对应篇目 Markdown
+    // 2. 抓取并渲染对应篇目的 Markdown
     function loadChapter(chap, activeBtn) {
       document.querySelectorAll('.chapter-btn').forEach(b => b.classList.remove('active'));
       if (activeBtn) activeBtn.classList.add('active');
@@ -280,7 +288,6 @@
       const contentBox = document.getElementById('novel-content');
       contentBox.innerHTML = '<p style="color: var(--muted);">正在从学术存证库载入正文...</p>';
 
-      // 自动转义中文与空格，确保 URL 完全合规
       const targetUrl = RAW_BASE_URL + encodeURIComponent(chap.fileName);
 
       fetch(targetUrl)
@@ -296,18 +303,11 @@
             <div style="padding: 16px; border-left: 3px solid var(--accent); background: var(--paper);">
               <p style="color: var(--accent); margin: 0 0 8px; font-weight: 700;">正文读取失败（${err.message}）</p>
               <p style="margin: 0; font-size: 14px; color: var(--muted);">
-                可能由于网络波动或 GitHub 原始节点延迟。您可以直接访问 
-                <a href="https://github.com/ryechung/archival-fiction" target="_blank" rel="noopener">GitHub 档案库源文件</a> 阅读。
+                您可以直接访问 <a href="https://github.com/ryechung/archival-fiction" target="_blank" rel="noopener">GitHub 档案库源文件</a> 阅读。
               </p>
             </div>`;
         });
     }
-
-    // 初始化
-    window.addEventListener('DOMContentLoaded', () => {
-      initButtons();
-      loadChapter(CHAPTERS[0], document.querySelector('.chapter-btn'));
-    });
   </script>
 </body>
 </html>

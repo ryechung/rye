@@ -318,6 +318,35 @@
       font-weight: 600;
     }
 
+    /* 联络与社交模块样式 */
+    .connect-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 14px;
+    }
+
+    .connect-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card);
+      border: 1px solid #ddd6cc;
+      padding: 8px 16px;
+      border-radius: 2px;
+      color: var(--ink);
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .connect-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
     footer {
       margin-top: 48px;
       padding-top: 20px;
@@ -344,6 +373,15 @@
       .path-row {
         grid-template-columns: 1fr;
         gap: 2px;
+      }
+
+      .connect-links {
+        gap: 8px;
+      }
+
+      .connect-btn {
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
       }
     }
   </style>
@@ -382,7 +420,9 @@
           "https://baike.baidu.com/item/梁忠/68957538",
           "https://www.wikidata.org/wiki/Q141364379",
           "https://orcid.org/0009-0006-5034-2668",
-          "https://weibo.com/u/1820329095"
+          "https://weibo.com/u/1820329095",
+          "https://www.instagram.com/ryeliang",
+          "https://www.facebook.com/rye.ad"
         ],
         "alumniOf": [
           {
@@ -650,6 +690,26 @@
 
       <div class="press-more">
         <a href="press.html">查看全部媒体报道与文献归档（2017—至今） →</a>
+      </div>
+    </section>
+
+    <!-- 联络与连接模块 -->
+    <section id="connect">
+      <h2>联络与连接</h2>
+      <p class="section-intro">
+        欢迎就公共策展、双城文化项目、社区营造、学术研讨与艺术实践交流联络。
+      </p>
+
+      <div class="connect-links">
+        <a href="https://www.instagram.com/ryeliang" target="_blank" rel="noopener" class="connect-btn">
+          <span>Instagram (@ryeliang)</span> ↗
+        </a>
+        <a href="https://www.facebook.com/rye.ad" target="_blank" rel="noopener" class="connect-btn">
+          <span>Facebook (rye.ad)</span> ↗
+        </a>
+        <a href="https://weibo.com/u/1820329095" target="_blank" rel="noopener" class="connect-btn">
+          <span>微博 (Weibo)</span> ↗
+        </a>
       </div>
     </section>
 

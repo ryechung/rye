@@ -6,7 +6,7 @@
   <title>时空圆柱与地理图谱 (1895—2026)｜麦子 Rye Liang</title>
   <meta name="description" content="1895—2026年家族双系源头、四代主体迁徙、消隐与全球流动的时空拓扑模型。">
 
-  <!-- 使用国内稳定公共 CDN 避免超时 -->
+  <!-- 使用稳定 CDN -->
   <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r128/three.min.js"></script>
   <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 
@@ -374,7 +374,7 @@
   <div class="top-overlay">
     <div class="title-box">
       <h1>时空圆柱与空间图谱 (1895—2026)</h1>
-      <p>标签直显当前城市 · 纯净稳定渲染 · 留下时空大头钉</p>
+      <p>底盘与标签双重地名显示 · 留下时空大头钉</p>
     </div>
     <a href="index.html" class="nav-back">← 返回主页</a>
   </div>
@@ -547,7 +547,7 @@
       shanjin: {
         name: "梁善进",
         colorHex: "#ffd60a",
-        colorThree: 0xffd60a,
+        colorThree: 0ffd60a,
         offset: { x: 0.0, z: 0.3 },
         labelOffset: { x: 5.5, y: -1.8, z: 2.5 },
         disappearYear: 2015,
@@ -730,6 +730,7 @@
     dirLight.position.set(30, 60, 30);
     scene.add(dirLight);
 
+    /* 关键：在 3D 底盘纹理中直接绘制所有城市地名 */
     function createDarkMapTexture() {
       const canvas = document.createElement("canvas");
       canvas.width = 2048;
@@ -752,14 +753,14 @@
         const py = 1024 + c.z * 22;
 
         ctx.beginPath();
-        ctx.arc(px, py, 4.0, 0, Math.PI * 2);
+        ctx.arc(px, py, 5.0, 0, Math.PI * 2);
         ctx.fillStyle = "#e64539";
         ctx.fill();
 
-        ctx.font = "bold 21px sans-serif";
+        ctx.font = "bold 26px sans-serif";
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "left";
-        ctx.fillText(cityName, px + 10, py + 7);
+        ctx.fillText(cityName, px + 12, py + 9);
       });
 
       return new THREE.CanvasTexture(canvas);
@@ -774,7 +775,6 @@
 
     Object.keys(CITIES).forEach(cityName => {
       const pos = CITIES[cityName];
-      
       const lineGeo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(pos.x, BASE_Y, pos.z),
         new THREE.Vector3(pos.x, -BASE_Y, pos.z)

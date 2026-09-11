@@ -1,3 +1,8 @@
+将项目放到 GitHub Pages 上测试是一个绝佳的选择！GitHub 会直接通过标准 HTTP 服务托管网页，能完美绕过本地双击打开时的 `file://` 安全拦截。
+
+以下是为你整理好的**最终完整单文件代码**。你可以直接把这段代码保存为 `index.html`（或任意文件名），推送到你的 GitHub 仓库中，并在仓库的 Settings -> Pages 中开启服务即可直接访问。
+
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -42,7 +47,6 @@
       z-index: 1;
     }
 
-    /* 顶部标题与返回按钮 */
     .top-overlay {
       position: absolute;
       top: 16px;
@@ -98,7 +102,6 @@
       color: var(--accent);
     }
 
-    /* 右侧一体化时间控制舱与大头钉标本舱 */
     .right-dock {
       position: absolute;
       top: 72px;
@@ -188,7 +191,6 @@
       font-weight: 600;
     }
 
-    /* 留言与大头钉面板 */
     .echo-title {
       font-weight: 700;
       font-size: 11px;
@@ -374,18 +376,15 @@
   <div id="webgl-container"></div>
   <div id="pin-tooltip-card"></div>
 
-  <!-- 顶部标题 -->
   <div class="top-overlay">
     <div class="title-box">
-      <h1>时空圆柱与地理图谱 (1895—2026)</h1>
-      <p>以闽台沪为中心 · 台湾岛内紧凑对齐 · 带有清晰地名</p>
+      <h1>时空圆柱与空间图谱 (1895—2026)</h1>
+      <p>标签直显当前城市 · 纯净稳定渲染 · 留下时空大头钉</p>
     </div>
     <a href="index.html" class="nav-back">← 返回主页</a>
   </div>
 
-  <!-- 右侧悬浮控制舱 -->
   <div class="right-dock">
-    <!-- 时间播放控制 -->
     <div class="dock-panel">
       <div class="year-header">
         <span class="year-label">年份</span>
@@ -404,7 +403,6 @@
       </div>
     </div>
 
-    <!-- 读者大头钉留名面板 -->
     <div class="dock-panel dock-echo">
       <div class="echo-title">
         <span>📌 留下你的时空大头钉</span>
@@ -460,13 +458,11 @@
         </button>
       </div>
 
-      <!-- 管理员工具栏 -->
       <div class="admin-bar">
         <span>管理留言</span>
         <button class="admin-toggle" id="admin-toggle-btn" onclick="toggleAdminMode()">开启管理</button>
       </div>
 
-      <!-- 已存大头钉列表 -->
       <div class="pin-list-title">
         <span>已扎入的大头钉</span>
         <span id="pin-count" style="color:var(--gold);">0</span>
@@ -476,64 +472,55 @@
   </div>
 
   <script>
-    /* ========================================================
-       1. 纠偏后的地理坐标矩阵（台湾岛内基隆、台北紧凑相邻）
-       ======================================================== */
     const CITIES = {
-      "闽侯福州":   { x: -5.5,  z: 8.5  },
-      "上海":       { x: -4.0,  z: -2.0 },
-      "基隆":       { x: 2.2,   z: 4.2  },
-      "台北":       { x: 1.8,   z: 5.2  },
-      "高雄":       { x: 0.5,   z: 9.0  },
-      "香港":       { x: -3.5,  z: 12.0 },
-      "横滨":       { x: 16.0,  z: -8.0 },
-      "神户":       { x: 13.0,  z: -6.0 },
-      "大阪":       { x: 12.0,  z: -6.5 },
-      "釜山":       { x: 8.5,   z: -10.0},
-      "新加坡":     { x: -9.0,  z: 18.0 },
-      "科伦坡":     { x: -16.0, z: 12.0 },
-      "苏伊士":     { x: -22.0, z: -2.0 },
-      "马赛":       { x: -25.0, z: -8.0 },
-      "鹿特丹":     { x: -27.0, z: -14.0},
-      "伦敦":       { x: -29.0, z: -15.0},
-      "旧金山":     { x: 22.0,  z: -14.0},
-      "洛杉矶":     { x: 23.5,  z: -10.0},
-      "巴拿马":     { x: 26.0,  z: 5.0  },
-      "纽奥良":     { x: 28.0,  z: -4.0 },
-      "纽约":       { x: 32.0,  z: -10.0},
-      "里约热内卢": { x: 20.0,  z: 22.0 },
+      "闽侯福州": { x: -7.0, z: 11.0 },
+      "上海": { x: -5.0, z: -2.0 },
+      "基隆": { x: 2.2, z: 4.2 },
+      "台北": { x: 1.8, z: 5.2 },
+      "高雄": { x: 0.5, z: 9.0 },
+      "香港": { x: -3.5, z: 12.0 },
+      "横滨": { x: 16.0, z: -8.0 },
+      "神户": { x: 13.0, z: -6.0 },
+      "大阪": { x: 12.0, z: -6.5 },
+      "釜山": { x: 8.5, z: -10.0 },
+      "新加坡": { x: -9.0, z: 18.0 },
+      "科伦坡": { x: -16.0, z: 12.0 },
+      "苏伊士": { x: -22.0, z: -2.0 },
+      "马赛": { x: -25.0, z: -8.0 },
+      "鹿特丹": { x: -27.0, z: -14.0 },
+      "伦敦": { x: -29.0, z: -15.0 },
+      "旧金山": { x: 22.0, z: -14.0 },
+      "洛杉矶": { x: 23.5, z: -10.0 },
+      "巴拿马": { x: 26.0, z: 5.0 },
+      "纽奥良": { x: 28.0, z: -4.0 },
+      "纽约": { x: 32.0, z: -10.0 },
+      "里约热内卢": { x: 20.0, z: 22.0 },
       "布宜诺斯艾利斯": { x: 18.0, z: 27.0 }
     };
 
-    /* ========================================================
-       2. 故事主角轨迹：丰富全球大港，非航行期瞬间瞬迁
-       ======================================================== */
     const TRAJECTORIES = {
       ancestors_liang: {
         name: "梁宝泉·赵氏",
-        displayName: "父系先祖",
         colorHex: "#ffffff",
         colorThree: 0xffffff,
         offset: { x: -0.15, z: -0.15 },
-        labelOffset: { x: -4.5, y: 1.8, z: -1.8 },
+        labelOffset: { x: -5.0, y: 2.0, z: -2.2 },
         keyframes: [{ year: 1895, city: "闽侯福州" }, { year: 1949, city: "闽侯福州" }]
       },
       ancestors_fang: {
         name: "方梦铿·汪氏",
-        displayName: "母系先祖",
         colorHex: "#f0d8d8",
         colorThree: 0xf0d8d8,
         offset: { x: 0.15, z: 0.15 },
-        labelOffset: { x: 4.5, y: 1.8, z: 1.8 },
+        labelOffset: { x: 5.0, y: 2.0, z: 2.2 },
         keyframes: [{ year: 1895, city: "闽侯福州" }, { year: 1949, city: "闽侯福州" }]
       },
       houji: {
         name: "梁厚基",
-        displayName: "梁厚基",
         colorHex: "#38bdf8",
         colorThree: 0x38bdf8,
         offset: { x: 0.2, z: -0.2 },
-        labelOffset: { x: 4.8, y: 1.6, z: -1.5 },
+        labelOffset: { x: 5.2, y: 1.8, z: -1.8 },
         disappearYear: 1974,
         disappearCity: "基隆",
         keyframes: [
@@ -547,11 +534,10 @@
       },
       fangyu: {
         name: "方玉",
-        displayName: "方玉",
         colorHex: "#ff5a79",
         colorThree: 0xff5a79,
         offset: { x: -0.2, z: 0.2 },
-        labelOffset: { x: -4.8, y: -1.4, z: 1.5 },
+        labelOffset: { x: -5.2, y: -1.6, z: 1.8 },
         disappearYear: 1950,
         disappearCity: "基隆",
         keyframes: [
@@ -565,11 +551,10 @@
       },
       shanjin: {
         name: "梁善进",
-        displayName: "梁善进",
         colorHex: "#ffd60a",
         colorThree: 0ffd60a,
         offset: { x: 0.0, z: 0.3 },
-        labelOffset: { x: 5.2, y: -1.6, z: 2.2 },
+        labelOffset: { x: 5.5, y: -1.8, z: 2.5 },
         disappearYear: 2015,
         disappearCity: "高雄",
         keyframes: [
@@ -578,8 +563,6 @@
           { year: 1945.0, city: "上海" },
           { year: 1948.9, city: "上海" },
           { year: 1949.0, city: "基隆" },
-
-          // 跑船历程（不经上海）
           { year: 1963.0, city: "基隆" },
           { year: 1963.6, city: "香港" },
           { year: 1964.2, city: "新加坡" },
@@ -613,8 +596,6 @@
           { year: 1986.6, city: "釜山" },
           { year: 1987.4, city: "洛杉矶" },
           { year: 1988.5, city: "基隆" },
-
-          // 上岸定居台北与瞬迁高雄
           { year: 1995.0, city: "台北" },
           { year: 2011.9, city: "台北" },
           { year: 2012.0, city: "高雄" },
@@ -622,8 +603,7 @@
         ]
       },
       rye: {
-        name: "Rye",
-        displayName: "Rye / 麦子",
+        name: "Rye / 麦子",
         colorHex: "#30d158",
         colorThree: 0x30d158,
         offset: { x: -0.3, z: -0.3 },
@@ -687,12 +667,10 @@
       return null;
     }
 
-    /* ========================================================
-       3. 标牌与地图底图纹理生成器
-       ======================================================== */
-    function createNameSprite(name, colorHex) {
+    /* 核心：标签直显 “姓名 · 当前城市” */
+    function createNameSprite(displayText, colorHex) {
       const canvas = document.createElement("canvas");
-      canvas.width = 380;
+      canvas.width = 440;
       canvas.height = 96;
       const ctx = canvas.getContext("2d");
 
@@ -703,10 +681,10 @@
       ctx.beginPath();
       const r = 18;
       ctx.moveTo(8 + r, 8);
-      ctx.lineTo(372 - r, 8);
-      ctx.quadraticCurveTo(372, 8, 372, 8 + r);
-      ctx.lineTo(372, 88 - r);
-      ctx.quadraticCurveTo(372, 88, 372, 92);
+      ctx.lineTo(432 - r, 8);
+      ctx.quadraticCurveTo(432, 8, 432, 8 + r);
+      ctx.lineTo(432, 88 - r);
+      ctx.quadraticCurveTo(432, 88, 432, 92);
       ctx.lineTo(8 + r, 92);
       ctx.quadraticCurveTo(8, 92, 8, 88 - r);
       ctx.lineTo(8, 8 + r);
@@ -720,23 +698,20 @@
       ctx.arc(42, 48, 12, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.font = "bold 34px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.font = "bold 30px -apple-system, BlinkMacSystemFont, sans-serif";
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      ctx.fillText(name, 70, 49);
+      ctx.fillText(displayText, 70, 49);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.minFilter = THREE.LinearFilter;
       const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
       const sprite = new THREE.Sprite(spriteMat);
-      sprite.scale.set(8.5, 2.1, 1);
+      sprite.scale.set(9.0, 2.1, 1);
       return sprite;
     }
 
-    /* ========================================================
-       4. Three.js 场景初始化
-       ======================================================== */
     const container = document.getElementById("webgl-container");
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -761,7 +736,6 @@
     dirLight.position.set(30, 60, 30);
     scene.add(dirLight);
 
-    /* 动态渲染带有城市名称的底盘地图纹理 */
     function createDarkMapTexture() {
       const canvas = document.createElement("canvas");
       canvas.width = 2048;
@@ -806,6 +780,7 @@
 
     Object.keys(CITIES).forEach(cityName => {
       const pos = CITIES[cityName];
+      
       const lineGeo = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(pos.x, BASE_Y, pos.z),
         new THREE.Vector3(pos.x, -BASE_Y, pos.z)
@@ -864,7 +839,7 @@
       scene.add(sph);
       particleSpheres[key] = sph;
 
-      const sprite = createNameSprite(item.displayName, item.colorHex);
+      const sprite = createNameSprite(item.name + " · 启动", item.colorHex);
       scene.add(sprite);
       nameSprites[key] = sprite;
 
@@ -889,11 +864,8 @@
       verticalDropLines[key] = dropLine;
     });
 
-    /* ========================================================
-       5. 琥珀金小号大头钉系统
-       ======================================================== */
     const DEFAULT_PINS = [{ id: "p1", city: "基隆", year: 1949, author: "老兵后代", msg: "在此扎根，岁月回响。" }];
-    let userPinsList = JSON.parse(localStorage.getItem('rye_spacetime_pushpins_v24')) || DEFAULT_PINS;
+    let userPinsList = JSON.parse(localStorage.getItem('rye_spacetime_pushpins_v26')) || DEFAULT_PINS;
     const pinObjectsGroup = new THREE.Group();
     scene.add(pinObjectsGroup);
 
@@ -968,7 +940,7 @@
 
     function deletePin(id) {
       userPinsList = userPinsList.filter(p => p.id !== id);
-      localStorage.setItem('rye_spacetime_pushpins_v24', JSON.stringify(userPinsList));
+      localStorage.setItem('rye_spacetime_pushpins_v26', JSON.stringify(userPinsList));
       renderAllPushPins();
       pinTooltip.style.display = "none";
     }
@@ -989,14 +961,11 @@
       if (year > 2026 || year < 1895) { alert("年份须在 1895 至 2026 之间。"); return; }
 
       userPinsList.push({ id: "pin_" + Date.now(), city, year, author, msg });
-      localStorage.setItem('rye_spacetime_pushpins_v24', JSON.stringify(userPinsList));
+      localStorage.setItem('rye_spacetime_pushpins_v26', JSON.stringify(userPinsList));
       document.getElementById("user-msg").value = "";
       renderAllPushPins();
     }
 
-    /* ========================================================
-       6. 射线检测与事件驱动
-       ======================================================== */
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const pinTooltip = document.getElementById("pin-tooltip-card");
@@ -1040,6 +1009,8 @@
     let isPlaying = true;
     let playInterval = null;
 
+    const lastRenderedText = {};
+
     function updateSpacetime(year) {
       yearDisplay.innerText = Math.round(year);
       slider.value = year;
@@ -1049,7 +1020,7 @@
         const item = TRAJECTORIES[key];
         const pos = getEntityPosAtYear(key, year);
         const sph = particleSpheres[key];
-        const sprite = nameSprites[key];
+        let sprite = nameSprites[key];
         const leader = leaderLines[key];
         const shadow = groundShadowRings[key];
         const dropLine = verticalDropLines[key];
@@ -1114,6 +1085,20 @@
           leader.visible = true;
           shadow.visible = true;
           dropLine.visible = true;
+
+          // 核心更新：动态拼接“姓名 · 当前城市”
+          const cityName = pos.currentCity || "途中";
+          const currentText = `${item.name} · ${cityName}`;
+          if (lastRenderedText[key] !== currentText) {
+            lastRenderedText[key] = currentText;
+            scene.remove(sprite);
+            sprite.material.map.dispose();
+            sprite.material.dispose();
+            const newSprite = createNameSprite(currentText, item.colorHex);
+            scene.add(newSprite);
+            nameSprites[key] = newSprite;
+            sprite = newSprite;
+          }
 
           if (isFlashing) {
             sph.scale.setScalar(1.0 + pulseFactor * 2.8);
@@ -1205,3 +1190,5 @@
   </script>
 </body>
 </html>
+
+```

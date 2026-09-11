@@ -9,6 +9,7 @@
   <!-- Three.js 3D 引擎与控制器 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
@@ -122,6 +123,9 @@
       box-shadow: 0 10px 32px rgba(0,0,0,0.85);
     }
 
+    /* 大头钉面板始终置顶，年份控制紧随其后。 */
+    .dock-echo { order: -1; }
+
     .year-header {
       display: flex;
       justify-content: space-between;
@@ -164,6 +168,17 @@
       color: var(--accent);
     }
 
+    .motion-status {
+      min-height: 28px;
+      margin: 0 0 7px;
+      padding: 5px 7px;
+      border-left: 2px solid var(--gold);
+      background: rgba(255, 214, 10, 0.06);
+      color: #d8d5cc;
+      font-size: 9.5px;
+      line-height: 1.35;
+    }
+
     .slider-container {
       display: flex;
       flex-direction: column;
@@ -195,7 +210,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
+      margin-bottom: 0;
     }
+
+    .echo-title:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .echo-chevron {
+      font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .echo-content {
+      margin-top: 8px;
+    }
+
+    .dock-echo.collapsed .echo-content { display: none; }
+    .dock-echo:not(.collapsed) .echo-chevron { transform: rotate(180deg); }
 
     .echo-input-group {
       display: flex;
@@ -354,11 +388,11 @@
 
     @media (max-width: 768px) {
       .right-dock {
-        width: 170px;
-        top: auto;
-        bottom: 16px;
+        width: min(300px, calc(100vw - 24px));
+        top: 64px;
+        bottom: auto;
         right: 12px;
-        max-height: 45vh;
+        max-height: calc(100vh - 76px);
       }
       .title-box { max-width: 55vw; }
       .title-box h1 { font-size: 12px; }
@@ -376,7 +410,7 @@
       <h1>时空圆柱与空间图谱 (1895—2026)</h1>
       <p>四代迁徙拓扑 · 标签直显当前城市 · 留下时空大头钉</p>
     </div>
-    <a href="index.html" class="nav-back">← 返回主页</a>
+    <a href="/" target="_top" class="nav-back">← 返回主页</a>
   </div>
 
   <div class="right-dock">
@@ -388,8 +422,10 @@
 
       <button class="btn-play-toggle" id="btn-play" onclick="togglePlay()">暂停播放 ❚❚</button>
 
+      <div class="motion-status" id="motion-status">时间轴准备中</div>
+
       <div class="slider-container">
-        <input type="range" id="year-slider" min="1895" max="2026" value="1895" step="0.1">
+        <input type="range" id="year-slider" min="1895" max="2026" value="1895" step="0.01">
         <div class="slider-bounds">
           <span>1895</span>
           <span>从容循环</span>
@@ -398,16 +434,30 @@
       </div>
     </div>
 
-    <div class="dock-panel dock-echo">
-      <div class="echo-title">
+    <div class="dock-panel dock-echo collapsed" id="echo-panel">
+      <div class="echo-title" role="button" tabindex="0" aria-expanded="false" aria-controls="echo-content" onclick="toggleEchoPanel()" onkeydown="handleEchoPanelKey(event)">
         <span>📌 留下你的时空大头钉</span>
+        <span class="echo-chevron" aria-hidden="true">⌄</span>
       </div>
-      
+      <div class="echo-content" id="echo-content">
       <div class="echo-input-group">
         <div>
           <div class="input-label"><span>选择地点</span></div>
           <select id="user-city">
             <option value="上海">上海</option>
+            <option value="北京">北京</option>
+            <option value="天津">天津</option>
+            <option value="重庆">重庆</option>
+            <option value="广州">广州</option>
+            <option value="深圳">深圳</option>
+            <option value="杭州">杭州</option>
+            <option value="南京">南京</option>
+            <option value="武汉">武汉</option>
+            <option value="成都">成都</option>
+            <option value="西安">西安</option>
+            <option value="厦门">厦门</option>
+            <option value="青岛">青岛</option>
+            <option value="大连">大连</option>
             <option value="台北">台北</option>
             <option value="基隆">基隆</option>
             <option value="高雄">高雄</option>
@@ -454,43 +504,120 @@
       </div>
 
       <div class="admin-bar">
-        <span>管理留言</span>
-        <button class="admin-toggle" id="admin-toggle-btn" onclick="toggleAdminMode()">开启管理</button>
+        <span>留言提交后公开显示</span>
+        <span>管理删除：Supabase 后台</span>
       </div>
 
       <div class="pin-list-title">
-        <span>已扎入的大头钉</span>
+        <span>已扎入的大头钉 · <span id="storage-status">连接中</span></span>
         <span id="pin-count" style="color:var(--gold);">0</span>
       </div>
       <div id="pin-items-container" style="max-height: 110px; overflow-y: auto; scrollbar-width: none;"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    const CITIES = {
-      "闽侯福州": { x: -7.0, z: 11.0 },
-      "上海": { x: -5.0, z: -2.0 },
-      "基隆": { x: 2.2, z: 4.2 },
-      "台北": { x: 1.8, z: 5.2 },
-      "高雄": { x: 0.5, z: 9.0 },
-      "香港": { x: -3.5, z: 12.0 },
-      "横滨": { x: 16.0, z: -8.0 },
-      "神户": { x: 13.0, z: -6.0 },
-      "大阪": { x: 12.0, z: -6.5 },
-      "釜山": { x: 8.5, z: -10.0 },
-      "新加坡": { x: -9.0, z: 18.0 },
-      "科伦坡": { x: -16.0, z: 12.0 },
-      "苏伊士": { x: -22.0, z: -2.0 },
-      "马赛": { x: -25.0, z: -8.0 },
-      "鹿特丹": { x: -27.0, z: -14.0 },
-      "伦敦": { x: -29.0, z: -15.0 },
-      "旧金山": { x: 22.0, z: -14.0 },
-      "洛杉矶": { x: 23.5, z: -10.0 },
-      "巴拿马": { x: 26.0, z: 5.0 },
-      "纽奥良": { x: 28.0, z: -4.0 },
-      "纽约": { x: 32.0, z: -10.0 },
-      "里约热内卢": { x: 20.0, z: 22.0 },
-      "布宜诺斯艾利斯": { x: 18.0, z: 27.0 }
+    // 城市不再凭视觉手工摆放，而由经纬度统一投影。
+    // 美洲经度加 360° 展开，使东亚位于中央、太平洋航线保持连续。
+    const CITY_GEO = {
+      "闽侯福州": { lon: 119.30, lat: 26.08 },
+      "上海": { lon: 121.47, lat: 31.23 },
+      "北京": { lon: 116.41, lat: 39.90 },
+      "天津": { lon: 117.20, lat: 39.08 },
+      "重庆": { lon: 106.55, lat: 29.56 },
+      "广州": { lon: 113.26, lat: 23.13 },
+      "深圳": { lon: 114.06, lat: 22.54 },
+      "杭州": { lon: 120.16, lat: 30.27 },
+      "南京": { lon: 118.80, lat: 32.06 },
+      "武汉": { lon: 114.31, lat: 30.59 },
+      "成都": { lon: 104.07, lat: 30.67 },
+      "西安": { lon: 108.94, lat: 34.34 },
+      "厦门": { lon: 118.09, lat: 24.48 },
+      "青岛": { lon: 120.38, lat: 36.07 },
+      "大连": { lon: 121.61, lat: 38.91 },
+      "基隆": { lon: 121.74, lat: 25.13 },
+      "台北": { lon: 121.57, lat: 25.04 },
+      "高雄": { lon: 120.30, lat: 22.63 },
+      "香港": { lon: 114.17, lat: 22.32 },
+      "横滨": { lon: 139.64, lat: 35.44 },
+      "神户": { lon: 135.20, lat: 34.69 },
+      "大阪": { lon: 135.50, lat: 34.69 },
+      "釜山": { lon: 129.08, lat: 35.18 },
+      "新加坡": { lon: 103.82, lat: 1.35 },
+      "科伦坡": { lon: 79.86, lat: 6.93 },
+      "苏伊士": { lon: 32.55, lat: 29.97 },
+      "马赛": { lon: 5.37, lat: 43.30 },
+      "鹿特丹": { lon: 4.48, lat: 51.92 },
+      "伦敦": { lon: -0.13, lat: 51.51 },
+      "旧金山": { lon: -122.42, lat: 37.77 },
+      "洛杉矶": { lon: -118.24, lat: 34.05 },
+      "巴拿马": { lon: -79.52, lat: 8.98 },
+      "纽奥良": { lon: -90.07, lat: 29.95 },
+      "纽约": { lon: -74.01, lat: 40.71 },
+      "里约热内卢": { lon: -43.17, lat: -22.91 },
+      "布宜诺斯艾利斯": { lon: -58.38, lat: -34.60 }
+    };
+
+    const MAP_CENTER_LON = 121;
+    const MAP_CENTER_LAT = 25;
+    const MAP_SCALE_X = 0.18;
+    const MAP_SCALE_Z = 0.46;
+
+    function projectGeo(lon, lat) {
+      const displayLon = lon < -30 ? lon + 360 : lon;
+      return {
+        x: (displayLon - MAP_CENTER_LON) * MAP_SCALE_X,
+        z: (MAP_CENTER_LAT - lat) * MAP_SCALE_Z
+      };
+    }
+
+    const CITIES = Object.fromEntries(
+      Object.entries(CITY_GEO).map(([name, geo]) => [name, projectGeo(geo.lon, geo.lat)])
+    );
+
+    // 这些城市用于访客留言定位，但不常驻显示竖线，避免主画面过密。
+    const PIN_ONLY_CITIES = new Set([
+      "北京", "天津", "重庆", "广州", "深圳", "杭州", "南京",
+      "武汉", "成都", "西安", "厦门", "青岛", "大连"
+    ]);
+
+    const seaPoint = (lon, lat) => projectGeo(lon, lat);
+
+    // 海上航路控制点。每条线都绕开主要陆块，并经过真实的海峡/运河。
+    const SEA_ROUTES = {
+      "基隆→香港": [seaPoint(121.0, 23.0), seaPoint(118.0, 20.0), seaPoint(114.8, 19.0)],
+      "香港→新加坡": [seaPoint(113.5, 18.0), seaPoint(112.0, 11.0), seaPoint(108.0, 5.0), seaPoint(104.5, 2.0)],
+      "新加坡→科伦坡": [seaPoint(100.0, 4.5), seaPoint(94.0, 6.0), seaPoint(87.0, 6.0), seaPoint(82.0, 6.5)],
+      "科伦坡→苏伊士": [seaPoint(70.0, 9.0), seaPoint(58.0, 12.0), seaPoint(47.5, 12.5), seaPoint(42.5, 16.0), seaPoint(38.5, 22.0)],
+      "苏伊士→马赛": [seaPoint(30.0, 32.0), seaPoint(23.0, 34.0), seaPoint(15.0, 37.0), seaPoint(8.0, 40.0)],
+      "马赛→鹿特丹": [seaPoint(1.0, 39.0), seaPoint(-5.8, 36.0), seaPoint(-9.0, 44.0), seaPoint(-4.0, 49.0), seaPoint(1.5, 51.0)],
+      "鹿特丹→伦敦": [seaPoint(3.2, 52.0), seaPoint(1.2, 51.6)],
+      "旧金山→横滨": [seaPoint(225.0, 35.0), seaPoint(205.0, 37.0), seaPoint(182.0, 38.0), seaPoint(160.0, 36.0), seaPoint(145.0, 35.0)],
+      "洛杉矶→横滨": [seaPoint(238.0, 31.0), seaPoint(215.0, 33.0), seaPoint(185.0, 36.0), seaPoint(158.0, 35.0), seaPoint(145.0, 34.8)],
+      "横滨→基隆": [seaPoint(137.0, 33.0), seaPoint(132.0, 30.0), seaPoint(126.0, 27.0), seaPoint(122.5, 25.5)],
+      "横滨→神户": [seaPoint(138.0, 33.5), seaPoint(136.0, 33.3)],
+      "横滨→釜山": [seaPoint(137.0, 33.4), seaPoint(133.0, 32.8), seaPoint(130.0, 33.8)],
+      "神户→大阪": [seaPoint(135.15, 34.45), seaPoint(135.35, 34.40)],
+      "大阪→釜山": [seaPoint(133.5, 33.4), seaPoint(131.0, 33.5), seaPoint(129.5, 34.0)],
+      "釜山→基隆": [seaPoint(127.0, 32.0), seaPoint(124.0, 28.0), seaPoint(122.0, 26.0)],
+      "纽约→纽奥良": [seaPoint(286.0, 38.0), seaPoint(282.0, 31.0), seaPoint(279.0, 25.0), seaPoint(274.0, 24.0), seaPoint(270.0, 27.0)],
+      "纽约→伦敦": [{ x: 35, z: -9 }, { x: 42, z: -14 }, { x: 42, z: -20 }, { x: -35, z: -20 }, seaPoint(-12.0, 48.0)],
+      "巴拿马→纽约": [seaPoint(284.0, 13.0), seaPoint(279.0, 22.0), seaPoint(282.0, 31.0), seaPoint(285.0, 38.0)],
+      "纽奥良→巴拿马": [seaPoint(269.0, 26.0), seaPoint(272.0, 21.0), seaPoint(277.0, 16.0), seaPoint(280.0, 10.0)],
+      "巴拿马→洛杉矶": [seaPoint(277.0, 8.0), seaPoint(268.0, 13.0), seaPoint(258.0, 20.0), seaPoint(248.0, 29.0)],
+      "洛杉矶→旧金山": [seaPoint(241.0, 33.0), seaPoint(238.5, 36.0)],
+      "新加坡→里约热内卢": [
+        seaPoint(92.0, -5.0), seaPoint(75.0, -16.0), seaPoint(55.0, -28.0),
+        seaPoint(30.0, -38.0), { x: -8, z: 31 }, { x: 10, z: 34 }, { x: 25, z: 30 }
+      ],
+      "科伦坡→里约热内卢": [
+        seaPoint(70.0, -8.0), seaPoint(52.0, -24.0), seaPoint(30.0, -38.0),
+        { x: -8, z: 32 }, { x: 10, z: 35 }, { x: 25, z: 30 }
+      ],
+      "里约热内卢→布宜诺斯艾利斯": [seaPoint(313.0, -26.0), seaPoint(306.0, -31.0)],
+      "里约热内卢→巴拿马": [seaPoint(315.0, -15.0), seaPoint(318.0, -3.0), seaPoint(309.0, 8.0), seaPoint(292.0, 12.0)],
+      "布宜诺斯艾利斯→巴拿马": [seaPoint(300.0, -28.0), seaPoint(310.0, -12.0), seaPoint(316.0, 0.0), seaPoint(305.0, 10.0), seaPoint(288.0, 12.0)]
     };
 
     const TRAJECTORIES = {
@@ -550,6 +677,10 @@
         colorThree: 0xffd60a,
         offset: { x: 0.0, z: 0.3 },
         labelOffset: { x: 5.5, y: -1.8, z: 2.5 },
+        travelMode: "mixed",
+        sailingStartYear: 1963.0,
+        sailingEndYear: 1994.5,
+        retirementYear: 1995.0,
         disappearYear: 2015,
         disappearCity: "高雄",
         keyframes: [
@@ -559,37 +690,84 @@
           { year: 1948.9, city: "上海" },
           { year: 1949.0, city: "基隆" },
           { year: 1963.0, city: "基隆" },
-          { year: 1963.6, city: "香港" },
-          { year: 1964.2, city: "新加坡" },
-          { year: 1964.8, city: "神户" },
-          { year: 1965.4, city: "大阪" },
-          { year: 1966.0, city: "基隆" },
-          { year: 1967.2, city: "科伦坡" },
-          { year: 1968.0, city: "苏伊士" },
-          { year: 1968.8, city: "马赛" },
-          { year: 1969.6, city: "鹿特丹" },
-          { year: 1970.4, city: "伦敦" },
-          { year: 1971.2, city: "基隆" },
-          { year: 1972.0, city: "釜山" },
-          { year: 1972.6, city: "横滨" },
-          { year: 1973.2, city: "旧金山" },
-          { year: 1973.8, city: "洛杉矶" },
-          { year: 1974.5, city: "基隆" },
-          { year: 1975.5, city: "新加坡" },
-          { year: 1976.4, city: "里约热内卢" },
-          { year: 1977.2, city: "布宜诺斯艾利斯" },
-          { year: 1978.0, city: "巴拿马" },
-          { year: 1978.8, city: "纽奥良" },
-          { year: 1979.6, city: "基隆" },
-          { year: 1980.8, city: "横滨" },
-          { year: 1981.4, city: "旧金山" },
-          { year: 1982.2, city: "巴拿马" },
-          { year: 1983.0, city: "纽约" },
-          { year: 1983.8, city: "鹿特丹" },
-          { year: 1984.6, city: "新加坡" },
-          { year: 1985.4, city: "基隆" },
-          { year: 1986.6, city: "釜山" },
-          { year: 1987.4, city: "洛杉矶" },
+          // 航次一：同一年内连续经过多个港口，不再“一段航程走一年”。
+          { year: 1963.08, city: "香港" },
+          { year: 1963.20, city: "新加坡" },
+          { year: 1963.32, city: "科伦坡" },
+          { year: 1963.46, city: "苏伊士" },
+          { year: 1963.58, city: "马赛" },
+          { year: 1963.70, city: "鹿特丹" },
+          { year: 1963.79, city: "伦敦" },
+          { year: 1963.92, city: "鹿特丹" },
+          { year: 1964.04, city: "马赛" },
+          { year: 1964.16, city: "苏伊士" },
+          { year: 1964.30, city: "科伦坡" },
+          { year: 1964.43, city: "新加坡" },
+          { year: 1964.56, city: "香港" },
+          { year: 1964.68, city: "基隆" },
+          { year: 1967.00, city: "基隆" },
+          // 航次二：东北亚近海班次。
+          { year: 1967.10, city: "釜山" },
+          { year: 1967.21, city: "大阪" },
+          { year: 1967.30, city: "神户" },
+          { year: 1967.41, city: "横滨" },
+          { year: 1967.54, city: "釜山" },
+          { year: 1967.67, city: "基隆" },
+          { year: 1972.00, city: "基隆" },
+          // 航次三：跨太平洋与美洲港口。
+          { year: 1972.12, city: "横滨" },
+          { year: 1972.30, city: "旧金山" },
+          { year: 1972.40, city: "洛杉矶" },
+          { year: 1972.58, city: "巴拿马" },
+          { year: 1972.70, city: "纽奥良" },
+          { year: 1972.84, city: "巴拿马" },
+          { year: 1973.02, city: "洛杉矶" },
+          { year: 1973.12, city: "旧金山" },
+          { year: 1973.30, city: "横滨" },
+          { year: 1973.44, city: "基隆" },
+          { year: 1975.00, city: "基隆" },
+          // 航次四：印度洋、南大西洋与南美洲。
+          { year: 1975.11, city: "香港" },
+          { year: 1975.24, city: "新加坡" },
+          { year: 1975.38, city: "科伦坡" },
+          { year: 1975.66, city: "里约热内卢" },
+          { year: 1975.80, city: "布宜诺斯艾利斯" },
+          { year: 1976.02, city: "里约热内卢" },
+          { year: 1976.22, city: "巴拿马" },
+          { year: 1976.35, city: "纽奥良" },
+          { year: 1976.48, city: "纽约" },
+          { year: 1976.66, city: "伦敦" },
+          { year: 1976.76, city: "鹿特丹" },
+          { year: 1976.90, city: "马赛" },
+          { year: 1977.05, city: "苏伊士" },
+          { year: 1977.20, city: "科伦坡" },
+          { year: 1977.34, city: "新加坡" },
+          { year: 1977.48, city: "基隆" },
+          { year: 1980.00, city: "基隆" },
+          // 航次五：第二次环球班次。
+          { year: 1980.10, city: "横滨" },
+          { year: 1980.28, city: "旧金山" },
+          { year: 1980.39, city: "洛杉矶" },
+          { year: 1980.56, city: "巴拿马" },
+          { year: 1980.70, city: "纽约" },
+          { year: 1980.88, city: "伦敦" },
+          { year: 1981.00, city: "鹿特丹" },
+          { year: 1981.13, city: "马赛" },
+          { year: 1981.28, city: "苏伊士" },
+          { year: 1981.43, city: "科伦坡" },
+          { year: 1981.56, city: "新加坡" },
+          { year: 1981.70, city: "香港" },
+          { year: 1981.82, city: "基隆" },
+          { year: 1986.00, city: "基隆" },
+          // 航次六：退休前的太平洋班次。
+          { year: 1986.10, city: "釜山" },
+          { year: 1986.22, city: "大阪" },
+          { year: 1986.34, city: "横滨" },
+          { year: 1986.52, city: "旧金山" },
+          { year: 1986.63, city: "洛杉矶" },
+          { year: 1986.82, city: "横滨" },
+          { year: 1986.95, city: "釜山" },
+          { year: 1987.08, city: "基隆" },
           { year: 1988.5, city: "基隆" },
           { year: 1995.0, city: "台北" },
           { year: 2011.9, city: "台北" },
@@ -603,16 +781,133 @@
         colorThree: 0x30d158,
         offset: { x: -0.3, z: -0.3 },
         labelOffset: { x: 4.5, y: 1.0, z: 0 },
+        followHomeOf: "shanjin",
+        followHomeCities: ["基隆", "台北"],
+        followFromYear: 1974.0,
+        followUntilYear: 2005.0,
         keyframes: [
           { year: 1974.0, city: "基隆" },
-          { year: 1994.9, city: "基隆" },
-          { year: 1995.0, city: "台北" },
+          { year: 1982.9, city: "基隆" },
+          { year: 1983.0, city: "台北" },
           { year: 2004.9, city: "台北" },
           { year: 2005.0, city: "上海" },
           { year: 2026.0, city: "上海" }
         ]
       }
     };
+
+    function buildSailorCareerKeyframes() {
+      const frames = [
+        { year: 1938, city: "闽侯福州", mode: "land" },
+        { year: 1944.9, city: "闽侯福州", mode: "land" },
+        { year: 1945.0, city: "上海", mode: "land" },
+        { year: 1948.9, city: "上海", mode: "land" },
+        { year: 1949.0, city: "基隆", mode: "rest" },
+        { year: 1963.0, city: "基隆", mode: "air" }
+      ];
+
+      // 16 个两年周期：每条固定航线航行 1.5 年、只往返一次，随后休息半年。
+      // 船舶停靠港不包含中国大陆境内港口；基地到登船港使用飞机接驳。
+      const routePlans = [
+        { name: "横滨—旧金山太平洋线", ports: ["横滨", "旧金山"] },
+        { name: "神户—洛杉矶太平洋线", ports: ["神户", "横滨", "洛杉矶"] },
+        { name: "釜山—巴拿马太平洋线", ports: ["釜山", "大阪", "神户", "横滨", "旧金山", "洛杉矶", "巴拿马"] },
+        { name: "新加坡—鹿特丹苏伊士线", ports: ["新加坡", "科伦坡", "苏伊士", "马赛", "鹿特丹"] },
+        { name: "新加坡—伦敦苏伊士线", ports: ["新加坡", "科伦坡", "苏伊士", "马赛", "鹿特丹", "伦敦"] },
+        { name: "新加坡—布宜诺斯艾利斯南洋线", ports: ["新加坡", "科伦坡", "里约热内卢", "布宜诺斯艾利斯"] },
+        { name: "横滨—纽约巴拿马线", ports: ["横滨", "旧金山", "洛杉矶", "巴拿马", "纽奥良", "纽约"] },
+        { name: "大阪—里约跨洋线", ports: ["大阪", "神户", "横滨", "洛杉矶", "巴拿马", "里约热内卢"] },
+        { name: "鹿特丹—纽约北大西洋线", ports: ["鹿特丹", "伦敦", "纽约"] },
+        { name: "马赛—纽奥良大西洋线", ports: ["马赛", "鹿特丹", "伦敦", "纽约", "纽奥良"] },
+        { name: "里约—纽约美洲东岸线", ports: ["里约热内卢", "巴拿马", "纽奥良", "纽约"] },
+        { name: "布宜诺斯艾利斯—洛杉矶线", ports: ["布宜诺斯艾利斯", "里约热内卢", "巴拿马", "洛杉矶"] },
+        { name: "新加坡—马赛苏伊士线", ports: ["新加坡", "科伦坡", "苏伊士", "马赛"] },
+        { name: "大阪—旧金山北太平洋线", ports: ["大阪", "神户", "横滨", "旧金山"] },
+        { name: "釜山—新加坡东亚线", ports: ["釜山", "基隆", "香港", "新加坡"] },
+        { name: "横滨—纽奥良巴拿马线", ports: ["横滨", "洛杉矶", "巴拿马", "纽奥良"] }
+      ];
+
+      const retirementYear = 1995.0;
+
+      function seaLegDistance(fromCity, toCity) {
+        const from = CITIES[fromCity];
+        const to = CITIES[toCity];
+        const points = getSeaRoute(fromCity, toCity, from, to);
+        let distance = 0;
+        for (let index = 1; index < points.length; index += 1) {
+          distance += Math.hypot(
+            points[index].x - points[index - 1].x,
+            points[index].z - points[index - 1].z
+          );
+        }
+        return Math.max(distance, 0.01);
+      }
+
+      routePlans.forEach((plan, routeIndex) => {
+        const cycleStart = 1963 + routeIndex * 2;
+        const homeCity = cycleStart >= 1983 ? "台北" : "基隆";
+        const embarkCity = plan.ports[0];
+        const shipStart = cycleStart + 0.05;
+        const shipEnd = cycleStart + 1.45;
+        const roundTripPorts = [
+          ...plan.ports,
+          ...plan.ports.slice(0, -1).reverse()
+        ];
+
+        frames.push({ year: cycleStart, city: homeCity, mode: "air", routeName: plan.name });
+        frames.push({ year: shipStart, city: embarkCity, mode: "sea", routeName: plan.name });
+
+        // 航程按实际海路长度分配时间，并在各港安排不同的短暂停留。
+        const legs = roundTripPorts.slice(1).map((city, index) => ({
+          from: roundTripPorts[index],
+          to: city,
+          distance: seaLegDistance(roundTripPorts[index], city)
+        }));
+        const totalDistance = legs.reduce((sum, leg) => sum + leg.distance, 0);
+        const dwellDurations = legs.map((_, index) => {
+          const isFinal = index === legs.length - 1;
+          return isFinal ? 0 : 0.012 + ((routeIndex * 2 + index) % 4) * 0.006;
+        });
+        const totalDwell = dwellDurations.reduce((sum, duration) => sum + duration, 0);
+        const movingDuration = (shipEnd - shipStart) - totalDwell;
+        let cursorYear = shipStart;
+
+        legs.forEach((leg, index) => {
+          cursorYear += movingDuration * (leg.distance / totalDistance);
+          const isFinalShipPoint = index === legs.length - 1;
+          frames.push({
+            year: cursorYear,
+            city: leg.to,
+            mode: isFinalShipPoint ? "air" : "port",
+            routeName: plan.name
+          });
+          if (!isFinalShipPoint) {
+            cursorYear += dwellDurations[index];
+            frames.push({
+              year: cursorYear,
+              city: leg.to,
+              mode: "sea",
+              routeName: plan.name
+            });
+          }
+        });
+
+        frames.push({ year: cycleStart + 1.5, city: homeCity, mode: "rest", routeName: plan.name });
+      });
+
+      frames.push(
+        { year: retirementYear, city: "台北", mode: "rest" },
+        { year: 2011.9, city: "台北", mode: "land" },
+        { year: 2012.0, city: "高雄", mode: "rest" },
+        { year: 2015.0, city: "高雄", mode: "rest" }
+      );
+
+      return frames
+        .sort((a, b) => a.year - b.year)
+        .filter((frame, index, all) => index === 0 || frame.year > all[index - 1].year);
+    }
+
+    TRAJECTORIES.shanjin.keyframes = buildSailorCareerKeyframes();
 
     const MIN_YEAR = 1895;
     const MAX_YEAR = 2026;
@@ -633,33 +928,126 @@
       return { x: base.x, z: base.z };
     }
 
+    function getSeaRoute(fromCity, toCity, p1, p2) {
+      const forwardKey = `${fromCity}→${toCity}`;
+      const reverseKey = `${toCity}→${fromCity}`;
+      let waypoints = SEA_ROUTES[forwardKey];
+      if (!waypoints && SEA_ROUTES[reverseKey]) {
+        waypoints = SEA_ROUTES[reverseKey].slice().reverse();
+      }
+      return [p1, ...(waypoints || []), p2];
+    }
+
+    function interpolatePolyline(points, t) {
+      if (points.length < 2) return points[0];
+      const lengths = [];
+      let total = 0;
+      for (let i = 0; i < points.length - 1; i++) {
+        const dx = points[i + 1].x - points[i].x;
+        const dz = points[i + 1].z - points[i].z;
+        const length = Math.hypot(dx, dz);
+        lengths.push(length);
+        total += length;
+      }
+      let target = Math.max(0, Math.min(1, t)) * total;
+      for (let i = 0; i < lengths.length; i++) {
+        if (target <= lengths[i] || i === lengths.length - 1) {
+          const localT = lengths[i] === 0 ? 0 : target / lengths[i];
+          return {
+            x: points[i].x + (points[i + 1].x - points[i].x) * localT,
+            z: points[i].z + (points[i + 1].z - points[i].z) * localT
+          };
+        }
+        target -= lengths[i];
+      }
+      return points[points.length - 1];
+    }
+
     function getEntityPosAtYear(entityKey, year) {
       const item = TRAJECTORIES[entityKey];
       if (!item) return null;
+
+      // Rye 在独立迁往上海前，跟随梁善进最近一次回台的落脚点；
+      // 只跟随台北/基隆，不随船出海，也不跟随后来的高雄迁居。
+      if (
+        item.followHomeOf &&
+        year >= item.followFromYear &&
+        year < item.followUntilYear
+      ) {
+        const followed = TRAJECTORIES[item.followHomeOf];
+        const latestHome = followed.keyframes
+          .filter(kf => kf.year <= year && item.followHomeCities.includes(kf.city))
+          .at(-1);
+        if (latestHome) {
+          const p = getCityXZForEntity(latestHome.city, entityKey);
+          return {
+            x: p.x,
+            y: yearToY(year),
+            z: p.z,
+            baseX: p.x,
+            baseZ: p.z,
+            currentCity: latestHome.city,
+            travelMode: "rest",
+            routeName: ""
+          };
+        }
+      }
+
       const kfs = item.keyframes;
       if (year < kfs[0].year) return null;
       if (year > kfs[kfs.length - 1].year) return null;
 
-      for (let i = 0; i < kfs.length - 1; i++) {
-        if (year >= kfs[i].year && year <= kfs[i + 1].year) {
-          if (kfs[i].city === kfs[i+1].city) {
-            const p = getCityXZForEntity(kfs[i].city, entityKey);
-            return { x: p.x, y: yearToY(year), z: p.z, baseX: p.x, baseZ: p.z, currentCity: kfs[i].city };
-          }
-          const t = (year - kfs[i].year) / (kfs[i + 1].year - kfs[i].year);
-          const p1 = getCityXZForEntity(kfs[i].city, entityKey);
-          const p2 = getCityXZForEntity(kfs[i + 1].city, entityKey);
-          return {
-            x: p1.x + (p2.x - p1.x) * t,
-            y: yearToY(year),
-            z: p1.z + (p2.z - p1.z) * t,
-            baseX: p1.x + (p2.x - p1.x) * t,
-            baseZ: p1.z + (p2.z - p1.z) * t,
-            currentCity: t < 0.5 ? kfs[i].city : kfs[i + 1].city
-          };
+      // 密集航行节点使用二分查找，避免每个动画帧从头扫描约 1800 个节点。
+      let low = 0;
+      let high = kfs.length - 2;
+      let segmentIndex = -1;
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        if (year < kfs[mid].year) {
+          high = mid - 1;
+        } else if (year > kfs[mid + 1].year) {
+          low = mid + 1;
+        } else {
+          segmentIndex = mid;
+          break;
         }
       }
-      return null;
+      if (segmentIndex < 0) return null;
+
+      const fromFrame = kfs[segmentIndex];
+      const toFrame = kfs[segmentIndex + 1];
+      if (fromFrame.city === toFrame.city) {
+        const p = getCityXZForEntity(fromFrame.city, entityKey);
+        return {
+          x: p.x, y: yearToY(year), z: p.z, baseX: p.x, baseZ: p.z,
+          currentCity: fromFrame.city,
+          travelMode: fromFrame.mode || "rest",
+          routeName: fromFrame.routeName || ""
+        };
+      }
+
+      const t = (year - fromFrame.year) / (toFrame.year - fromFrame.year);
+      const fromCity = fromFrame.city;
+      const toCity = toFrame.city;
+      const p1 = getCityXZForEntity(fromCity, entityKey);
+      const p2 = getCityXZForEntity(toCity, entityKey);
+      const segmentMode = fromFrame.mode || (item.travelMode === "sea" ? "sea" : "land");
+      const isSeaLeg = segmentMode === "sea";
+      const isAirLeg = segmentMode === "air";
+      const route = isSeaLeg ? getSeaRoute(fromCity, toCity, p1, p2) : [p1, p2];
+      const p = interpolatePolyline(route, t);
+      return {
+        x: p.x,
+        y: yearToY(year),
+        z: p.z,
+        baseX: p.x,
+        baseZ: p.z,
+        currentCity: isSeaLeg
+          ? `航行中 · ${fromCity}→${toCity}`
+          : (isAirLeg ? `飞行接驳 · ${fromCity}→${toCity}` : (t < 0.5 ? fromCity : toCity)),
+        travelMode: segmentMode,
+        routeName: fromFrame.routeName || ""
+      };
     }
 
     function createNameSprite(displayText, colorHex) {
@@ -706,17 +1094,42 @@
       return sprite;
     }
 
+    function createCityLabelSprite(cityName) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 256;
+      canvas.height = 64;
+      const ctx = canvas.getContext("2d");
+      ctx.font = "600 25px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.78)";
+      ctx.fillRect(0, 8, 256, 48);
+      ctx.fillStyle = "#b8b7b2";
+      ctx.fillText(cityName, 128, 32);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: false,
+        opacity: 0.86
+      }));
+      sprite.scale.set(4.8, 1.2, 1);
+      return sprite;
+    }
+
     const container = document.getElementById("webgl-container");
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x000000, 0.0075);
+    // 不启用距离雾化，拉远相机时轨迹和城市仍保持清晰。
+    scene.fog = null;
 
     const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(55, 42, 70);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -730,7 +1143,7 @@
     dirLight.position.set(30, 60, 30);
     scene.add(dirLight);
 
-    const planeGeo = new THREE.PlaneGeometry(100, 100, 25, 25);
+    const planeGeo = new THREE.PlaneGeometry(110, 110, 28, 28);
     const planeMat = new THREE.MeshBasicMaterial({ color: 0x14141e, wireframe: true, transparent: true, opacity: 0.4 });
     const floorGrid = new THREE.Mesh(planeGeo, planeMat);
     floorGrid.rotation.x = -Math.PI / 2;
@@ -741,6 +1154,7 @@
     scene.add(portsGroup);
 
     Object.keys(CITIES).forEach(cityName => {
+      if (PIN_ONLY_CITIES.has(cityName)) return;
       const pos = CITIES[cityName];
       
       const lineGeo = new THREE.BufferGeometry().setFromPoints([
@@ -758,9 +1172,13 @@
       dotMesh.rotation.x = -Math.PI / 2;
       dotMesh.position.set(pos.x, BASE_Y + 0.02, pos.z);
       portsGroup.add(dotMesh);
+
+      const cityLabel = createCityLabelSprite(cityName);
+      cityLabel.position.set(pos.x, BASE_Y + 0.75, pos.z + 0.7);
+      portsGroup.add(cityLabel);
     });
 
-    const ringRadius = 40;
+    const ringRadius = 45;
     const ringYears = [1895, 1911, 1938, 1945, 1949, 1950, 1963, 1973, 1974, 1995, 2005, 2012, 2015, 2026];
     ringYears.forEach(yr => {
       const y = yearToY(yr);
@@ -775,8 +1193,43 @@
     });
 
     const dynamicTrailLines = {};
+    const trailSampleYears = {};
+
+    function buildStaticTrailGeometry(entityKey, item) {
+      const points = [];
+      const colors = [];
+      const years = [];
+      const startYear = item.keyframes[0].year;
+      const endYear = Math.min(item.keyframes[item.keyframes.length - 1].year, item.disappearYear || MAX_YEAR);
+      const baseColor = new THREE.Color(item.colorHex);
+      const darkColor = new THREE.Color("#101018");
+
+      for (let year = startYear; year <= endYear;) {
+        const p = getEntityPosAtYear(entityKey, year);
+        if (p) {
+          points.push(new THREE.Vector3(p.x, p.y, p.z));
+          years.push(year);
+          const progress = (year - startYear) / Math.max(1, endYear - startYear);
+          const color = p.travelMode === "air"
+            ? new THREE.Color("#a8b0bd")
+            : darkColor.clone().lerp(baseColor, 0.25 + progress * 0.75);
+          colors.push(color.r, color.g, color.b);
+        }
+        const dense = item.travelMode === "mixed" &&
+          year >= item.sailingStartYear && year <= item.sailingEndYear;
+        year += dense ? 0.01 : 0.12;
+      }
+
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+      geometry.setDrawRange(0, 0);
+      trailSampleYears[entityKey] = years;
+      return geometry;
+    }
+
     Object.keys(TRAJECTORIES).forEach(key => {
-      const trailGeo = new THREE.BufferGeometry();
+      const item = TRAJECTORIES[key];
+      const trailGeo = buildStaticTrailGeometry(key, item);
       const trailMat = new THREE.LineBasicMaterial({
         vertexColors: true,
         linewidth: 2.8,
@@ -834,17 +1287,57 @@
     });
 
     const DEFAULT_PINS = [{ id: "p1", city: "基隆", year: 1949, author: "老兵后代", msg: "在此扎根，岁月回响。" }];
-    let userPinsList = JSON.parse(localStorage.getItem('rye_spacetime_pushpins_v26')) || DEFAULT_PINS;
+    const LOCAL_PIN_KEY = "rye_spacetime_pushpins_v30";
+    const SUPABASE_URL = "https://qgqrknwgiucycauduuiu.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_rPv-tvduI8bygxJycIzvQA_tOl-uAZB";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    let userPinsList = [];
+    let storageMode = "shared";
     const pinObjectsGroup = new THREE.Group();
     scene.add(pinObjectsGroup);
 
+    function toggleEchoPanel(forceOpen) {
+      const panel = document.getElementById("echo-panel");
+      const title = panel.querySelector(".echo-title");
+      const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : panel.classList.contains("collapsed");
+      panel.classList.toggle("collapsed", !shouldOpen);
+      title.setAttribute("aria-expanded", String(shouldOpen));
+    }
+
+    function handleEchoPanelKey(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleEchoPanel();
+      }
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+      })[char]);
+    }
+
+    async function loadPushPins() {
+      try {
+        const { data, error } = await supabaseClient
+          .from("pushpins")
+          .select("id,city,year,author,message,created_at")
+          .order("created_at", { ascending: true })
+          .limit(200);
+        if (error) throw error;
+        userPinsList = (data || []).map(pin => ({ ...pin, msg: pin.message }));
+        storageMode = "shared";
+      } catch (error) {
+        storageMode = "local";
+        userPinsList = JSON.parse(localStorage.getItem(LOCAL_PIN_KEY) || "null") || DEFAULT_PINS;
+      }
+      document.getElementById("storage-status").innerText = storageMode === "shared" ? "公开共享" : "本机备用";
+      renderAllPushPins();
+    }
+
     let isAdminMode = false;
     function toggleAdminMode() {
-      isAdminMode = !isAdminMode;
-      const btn = document.getElementById("admin-toggle-btn");
-      btn.innerText = isAdminMode ? "退出管理" : "开启管理";
-      btn.classList.toggle("active", isAdminMode);
-      renderAllPushPins();
+      alert("请在 Supabase 的 Table Editor 中管理留言。网页端不保存管理员密钥。");
     }
 
     function createPushPinMesh(pinData) {
@@ -900,18 +1393,15 @@
         };
         itemDiv.innerHTML = `
           <button class="btn-delete-pin" onclick="deletePin('${pin.id}')">删</button>
-          <div class="pin-item-head"><span>📍 ${pin.city} · ${pin.year}年</span><span style="color:#a4a096;font-size:9.5px;">${pin.author}</span></div>
-          <div class="pin-item-body">${pin.msg}</div>
+          <div class="pin-item-head"><span>📍 ${escapeHTML(pin.city)} · ${Number(pin.year)}年</span><span style="color:#a4a096;font-size:9.5px;">${escapeHTML(pin.author)}</span></div>
+          <div class="pin-item-body">${escapeHTML(pin.msg)}</div>
         `;
         container.appendChild(itemDiv);
       });
     }
 
-    function deletePin(id) {
-      userPinsList = userPinsList.filter(p => p.id !== id);
-      localStorage.setItem('rye_spacetime_pushpins_v26', JSON.stringify(userPinsList));
-      renderAllPushPins();
-      pinTooltip.style.display = "none";
+    async function deletePin(id) {
+      alert("为保护数据库安全，请在 Supabase 的 Table Editor 中删除或隐藏留言。");
     }
 
     function focusOnPushPin(pin) {
@@ -920,7 +1410,7 @@
       controls.target.set(c.x, yearToY(pin.year), c.z);
     }
 
-    function submitPushPin() {
+    async function submitPushPin() {
       const city = document.getElementById("user-city").value;
       const year = parseFloat(document.getElementById("user-year").value);
       const author = document.getElementById("user-author").value.trim() || "时空访客";
@@ -929,10 +1419,35 @@
       if (!msg) { alert("请写下一句留言。"); return; }
       if (year > 2026 || year < 1895) { alert("年份须在 1895 至 2026 之间。"); return; }
 
-      userPinsList.push({ id: "pin_" + Date.now(), city, year, author, msg });
-      localStorage.setItem('rye_spacetime_pushpins_v26', JSON.stringify(userPinsList));
+      if (storageMode === "local") {
+        userPinsList.push({ id: "pin_" + Date.now(), city, year, author, msg });
+        localStorage.setItem(LOCAL_PIN_KEY, JSON.stringify(userPinsList));
+      } else {
+        let clientHash = localStorage.getItem("rye_spacetime_client_id");
+        if (!clientHash) {
+          clientHash = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random()}`;
+          localStorage.setItem("rye_spacetime_client_id", clientHash);
+        }
+        const { data, error } = await supabaseClient.rpc("submit_pushpin", {
+          p_city: city,
+          p_year: year,
+          p_author: author,
+          p_message: msg,
+          p_client_hash: clientHash
+        });
+        if (error) {
+          const message = /too many/i.test(error.message)
+            ? "提交过于频繁，请一分钟后再试。"
+            : "提交失败，请确认 Supabase 数据表和权限已经建立。";
+          alert(message);
+          return;
+        }
+        const pin = Array.isArray(data) ? data[0] : data;
+        userPinsList.push({ ...pin, msg: pin.message });
+      }
       document.getElementById("user-msg").value = "";
       renderAllPushPins();
+      toggleEchoPanel(false);
     }
 
     const raycaster = new THREE.Raycaster();
@@ -961,9 +1476,9 @@
           pinTooltip.style.top = Math.max(20, event.clientY - 30) + "px";
           pinTooltip.innerHTML = `
             <div style="font-weight:750;color:var(--gold);margin-bottom:3px;display:flex;justify-content:space-between;"><span>📌 读者时空留名</span><span style="font-size:10px;">${hit.year}年</span></div>
-            <div><strong>地点：</strong>${hit.city}</div>
-            <div><strong>留名人：</strong>${hit.author}</div>
-            <div style="margin:4px 0;padding:4px 0;border-top:1px dashed #333;color:#f0f0f0;">“${hit.msg}”</div>
+            <div><strong>地点：</strong>${escapeHTML(hit.city)}</div>
+            <div><strong>留名人：</strong>${escapeHTML(hit.author)}</div>
+            <div style="margin:4px 0;padding:4px 0;border-top:1px dashed #333;color:#f0f0f0;">“${escapeHTML(hit.msg)}”</div>
           `;
           focusOnPushPin(hit);
           setTimeout(() => { pinTooltip.style.display = "none"; }, 6000);
@@ -980,10 +1495,56 @@
 
     const lastRenderedText = {};
 
+    function upperBound(sortedValues, value) {
+      let low = 0;
+      let high = sortedValues.length;
+      while (low < high) {
+        const mid = Math.floor((low + high) / 2);
+        if (sortedValues[mid] <= value) low = mid + 1;
+        else high = mid;
+      }
+      return low;
+    }
+
+    function getTravelSegmentAtYear(year) {
+      const sailor = TRAJECTORIES.shanjin;
+      const kfs = sailor.keyframes;
+      for (let i = 0; i < kfs.length - 1; i++) {
+        const from = kfs[i];
+        const to = kfs[i + 1];
+        if (year >= from.year && year <= to.year) {
+          return {
+            from: from.city,
+            to: to.city,
+            mode: from.mode || "land",
+            routeName: from.routeName || ""
+          };
+        }
+      }
+      return null;
+    }
+
     function updateSpacetime(year) {
-      yearDisplay.innerText = Math.round(year);
+      const travelSegment = getTravelSegmentAtYear(year);
+      const isActiveTravel = travelSegment && ["sea", "air"].includes(travelSegment.mode);
+      yearDisplay.innerText = isActiveTravel ? year.toFixed(2) : Math.round(year);
       slider.value = year;
       sliceMesh.position.y = yearToY(year);
+
+      const motionStatus = document.getElementById("motion-status");
+      if (travelSegment?.mode === "sea") {
+        motionStatus.innerText = `${travelSegment.routeName}｜航行：${travelSegment.from} → ${travelSegment.to}`;
+      } else if (travelSegment?.mode === "air") {
+        motionStatus.innerText = `${travelSegment.routeName}｜飞机接驳：${travelSegment.from} → ${travelSegment.to}`;
+      } else if (travelSegment?.mode === "port") {
+        motionStatus.innerText = `${travelSegment.routeName}｜港口停留：${travelSegment.from}`;
+      } else if (year >= 1995) {
+        motionStatus.innerText = "梁善进：1995 年退休后的居住轨迹";
+      } else if (year >= 1963) {
+        motionStatus.innerText = "梁善进：回台停留 / 休假（约半年）";
+      } else {
+        motionStatus.innerText = "家庭迁徙时间轴";
+      }
 
       Object.keys(TRAJECTORIES).forEach(key => {
         const item = TRAJECTORIES[key];
@@ -995,34 +1556,10 @@
         const dropLine = verticalDropLines[key];
         const trailLine = dynamicTrailLines[key];
 
-        const historyPoints = [];
-        const historyColors = [];
         const startYear = item.keyframes[0].year;
-        const endYear = Math.min(year, item.disappearYear || 2026);
-
-        if (year >= startYear) {
-          const baseColor = new THREE.Color(item.colorHex);
-          const darkFadeColor = new THREE.Color("#101018");
-
-          for (let y = startYear; y <= endYear; y += 0.12) {
-            const p = getEntityPosAtYear(key, y);
-            if (p) {
-              historyPoints.push(new THREE.Vector3(p.x, p.y, p.z));
-              const age = Math.max(0, year - y);
-              const tFade = Math.min(1.0, age / 35.0);
-              const c = baseColor.clone().lerp(darkFadeColor, tFade * 0.85);
-              historyColors.push(c.r, c.g, c.b);
-            }
-          }
-        }
-
-        if (historyPoints.length >= 2) {
-          trailLine.visible = true;
-          trailLine.geometry.setFromPoints(historyPoints);
-          trailLine.geometry.setAttribute('color', new THREE.Float32BufferAttribute(historyColors, 3));
-        } else {
-          trailLine.visible = false;
-        }
+        const visibleTrailPoints = upperBound(trailSampleYears[key], year);
+        trailLine.geometry.setDrawRange(0, visibleTrailPoints);
+        trailLine.visible = visibleTrailPoints >= 2;
 
         let isVisible = false;
         let pulseFactor = 1.0;
@@ -1120,7 +1657,9 @@
     function startLoopPlay() {
       if (playInterval) clearInterval(playInterval);
       playInterval = setInterval(() => {
-        let y = parseFloat(slider.value) + 0.09;
+        const currentYear = parseFloat(slider.value);
+        // 使用统一时间步长；不再在航行阶段减速 60 倍。
+        let y = currentYear + 0.03;
         if (y > MAX_YEAR) y = MIN_YEAR;
         updateSpacetime(y);
       }, 45);
@@ -1152,7 +1691,7 @@
     });
 
     updateSpacetime(1895);
-    renderAllPushPins();
+    loadPushPins();
     startLoopPlay();
     animate();
   </script>

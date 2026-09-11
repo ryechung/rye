@@ -6,9 +6,9 @@
   <title>时空圆柱与地理图谱 (1895—2026)｜麦子 Rye Liang</title>
   <meta name="description" content="1895—2026年家族双系源头、四代主体迁徙、消隐与全球流动的时空拓扑模型。">
 
-  <!-- Three.js 3D 引擎与控制器 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- 使用国内稳定公共 CDN 避免超时 -->
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r128/three.min.js"></script>
+  <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 
   <style>
     :root {
@@ -547,7 +547,7 @@
       shanjin: {
         name: "梁善进",
         colorHex: "#ffd60a",
-        colorThree: 0ffd60a,
+        colorThree: 0xffd60a,
         offset: { x: 0.0, z: 0.3 },
         labelOffset: { x: 5.5, y: -1.8, z: 2.5 },
         disappearYear: 2015,
@@ -662,7 +662,6 @@
       return null;
     }
 
-    /* 核心：标签直显 “姓名 · 当前城市” */
     function createNameSprite(displayText, colorHex) {
       const canvas = document.createElement("canvas");
       canvas.width = 440;
@@ -1081,7 +1080,6 @@
           shadow.visible = true;
           dropLine.visible = true;
 
-          // 核心更新：动态拼接“姓名 · 当前城市”
           const cityName = pos.currentCity || "途中";
           const currentText = `${item.name} · ${cityName}`;
           if (lastRenderedText[key] !== currentText) {
@@ -1185,5 +1183,3 @@
   </script>
 </body>
 </html>
-
-```
